@@ -63,10 +63,10 @@ public final class NightscoutService: Service {
         return [:]
     }
 
-    public var isComplete: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
+    public var hasValidConfiguration: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
 
-    public func verify(completion: @escaping (Error?) -> Void) {
-        guard isComplete, let siteURL = siteURL, let apiSecret = apiSecret else {
+    public func verifyConfiguration(completion: @escaping (Error?) -> Void) {
+        guard hasValidConfiguration, let siteURL = siteURL, let apiSecret = apiSecret else {
             return
         }
 
@@ -219,10 +219,6 @@ extension NightscoutService: RemoteData {
             battery = nil
         }
         return UploaderStatus(name: uploaderDevice.name, timestamp: Date(), battery: battery)
-    }
-
-    public func upload(pumpStatus: PumpStatus?, deviceName: String?, firmwareVersion: String?) {
-        upload(pumpStatus: pumpStatus, loopStatus: nil, deviceName: deviceName, firmwareVersion: firmwareVersion, uploaderStatus: nil)
     }
 
     private func upload(pumpStatus: PumpStatus?, loopStatus: LoopStatus?, deviceName: String?, firmwareVersion: String?, uploaderStatus: UploaderStatus?) {
