@@ -37,6 +37,10 @@ public final class NightscoutService: Service {
 
     private let delegate = WeakSynchronizedDelegate<ServiceDelegate>()
 
+    public weak var remoteDataDelegate: RemoteDataDelegate?
+
+    private var remoteDataCarbStoreRecentDataQueryAnchor: RemoteDataAnchor?
+
     public var siteURL: URL?
 
     public var apiSecret: String?
@@ -216,7 +220,7 @@ extension NightscoutService: RemoteData {
         if uploaderDevice.isBatteryMonitoringEnabled {
             battery = Int(uploaderDevice.batteryLevel * 100)
         } else {
-            battery = nil
+            battery = 100   // Using nil causes Nightscout to crash
         }
         return UploaderStatus(name: uploaderDevice.name, timestamp: Date(), battery: battery)
     }
@@ -243,39 +247,6 @@ extension NightscoutService: RemoteData {
         uploader.uploadDeviceStatus(deviceStatus)
     }
 
-    public func upload(glucoseValues values: [GlucoseValue], sensorState: SensorDisplayable?) {
-        guard let uploader = uploader else {
-            return
-        }
-
-        let device = "loop://\(UIDevice.current.name)"
-        let direction: String? = {
-            switch sensorState?.trendType {
-            case .up?:
-                return "SingleUp"
-            case .upUp?, .upUpUp?:
-                return "DoubleUp"
-            case .down?:
-                return "SingleDown"
-            case .downDown?, .downDownDown?:
-                return "DoubleDown"
-            case .flat?:
-                return "Flat"
-            case .none:
-                return nil
-            }
-        }()
-
-        for value in values {
-            uploader.uploadSGV(
-                glucoseMGDL: Int(value.quantity.doubleValue(for: .milligramsPerDeciliter)),
-                at: value.startDate,
-                direction: direction,
-                device: device
-            )
-        }
-    }
-
     public func upload(pumpEvents events: [PersistedPumpEvent], fromSource source: String, completion: @escaping (Result<[URL], Error>) -> Void) {
         guard let uploader = uploader else {
             completion(.success(events.map({ $0.objectIDURL })))
@@ -285,22 +256,8 @@ extension NightscoutService: RemoteData {
         uploader.upload(events, fromSource: source, completion: completion)
     }
 
-    public func upload(carbEntries entries: [StoredCarbEntry], completion: @escaping (_ entries: [StoredCarbEntry]) -> Void) {
-        guard let uploader = uploader else {
-            completion(entries)
-            return
-        }
-
-        uploader.uploadCarbEntries(entries, completion: completion)
-    }
-
-    public func delete(carbEntries entries: [DeletedCarbEntry], completion: @escaping (_ entries: [DeletedCarbEntry]) -> Void) {
-        guard let uploader = uploader else {
-            completion(entries)
-            return
-        }
-
-        uploader.deleteCarbEntries(entries, completion: completion)
+    public func synchronizeRemoteData(completion: @escaping (_ result: Result<Bool, Error>) -> Void)  {
+        completion(.success(false))
     }
 
 }

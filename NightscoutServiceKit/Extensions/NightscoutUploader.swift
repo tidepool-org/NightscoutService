@@ -54,7 +54,7 @@ extension NightscoutUploader {
     func deleteCarbEntries(_ entries: [DeletedCarbEntry], completion: @escaping ([DeletedCarbEntry]) -> Void) {
         var deleted = entries
 
-        deleteTreatmentsById(deleted.map { $0.externalID }) { (error) in
+        deleteTreatmentsById(deleted.compactMap { $0.externalID }) { (error) in
             if let error = error {
                 self.log.error("%{public}@", String(reflecting: error))
             } else {
