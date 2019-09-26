@@ -68,10 +68,10 @@ public final class NightscoutService: Service {
         return [:]
     }
 
-    public var hasValidConfiguration: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
+    public var hasConfiguration: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
 
     public func verifyConfiguration(completion: @escaping (Error?) -> Void) {
-        guard hasValidConfiguration, let siteURL = siteURL, let apiSecret = apiSecret else {
+        guard hasConfiguration, let siteURL = siteURL, let apiSecret = apiSecret else {
             return
         }
 
