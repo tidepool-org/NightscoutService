@@ -79,21 +79,18 @@ public final class NightscoutService: Service {
         uploader.checkAuth(completion)
     }
 
-    public func notifyCreated(completion: @escaping () -> Void) {
+    public func completeCreate() {
         try? KeychainManager().setNightscoutCredentials(siteURL: siteURL, apiSecret: apiSecret)
         createUploader()
-        notifyDelegateOfCreation(completion: completion)
     }
 
-    public func notifyUpdated(completion: @escaping () -> Void) {
+    public func completeUpdate() {
         try? KeychainManager().setNightscoutCredentials(siteURL: siteURL, apiSecret: apiSecret)
         createUploader()
-        notifyDelegateOfUpdation(completion: completion)
     }
 
-    public func notifyDeleted(completion: @escaping () -> Void) {
+    public func completeDelete() {
         try? KeychainManager().setNightscoutCredentials()
-        notifyDelegateOfDeletion(completion: completion)
     }
 
     private func createUploader() {
