@@ -9,7 +9,6 @@
 import LoopKit
 import NightscoutUploadKit
 
-
 extension PersistedPumpEvent {
 
     func treatment(enteredBy source: String) -> NightscoutTreatment? {

@@ -15,5 +15,3 @@ FOUNDATION_EXPORT double NightscoutServiceKitUIVersionNumber;
 FOUNDATION_EXPORT const unsigned char NightscoutServiceKitUIVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <NightscoutServiceKitUI/PublicHeader.h>
-
-

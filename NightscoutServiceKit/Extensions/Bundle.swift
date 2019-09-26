@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 extension Bundle {
 
     var shortVersionString: String {

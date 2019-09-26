@@ -11,7 +11,6 @@ import LoopKit
 import LoopKitUI
 import NightscoutServiceKit
 
-
 final class NightscoutServiceTableViewController: ServiceTableViewController, UITextFieldDelegate {
 
     private let nightscoutService: NightscoutService
@@ -164,7 +163,6 @@ final class NightscoutServiceTableViewController: ServiceTableViewController, UI
 
 }
 
-
 fileprivate extension URL {
 
     init?(http: String) {
@@ -179,11 +177,8 @@ fileprivate extension URL {
 
 }
 
-
 extension AuthenticationTableViewCell: IdentifiableClass {}
 
-
 extension AuthenticationTableViewCell: NibLoadable {}
-
 
 extension TextButtonTableViewCell: IdentifiableClass {}

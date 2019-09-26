@@ -11,7 +11,6 @@ import LoopKit
 import NightscoutUploadKit
 import HealthKit
 
-
 extension MealBolusNightscoutTreatment {
 
     convenience init(carbEntry: StoredCarbEntry) {

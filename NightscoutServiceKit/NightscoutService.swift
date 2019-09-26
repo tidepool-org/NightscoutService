@@ -11,7 +11,6 @@ import LoopKit
 import NightscoutUploadKit
 import os.log
 
-
 public final class NightscoutService: Service {
 
     public static let managerIdentifier = "NightscoutService"
@@ -104,7 +103,6 @@ public final class NightscoutService: Service {
 
 }
 
-
 extension NightscoutService {
 
     public var debugDescription: String {
@@ -114,7 +112,6 @@ extension NightscoutService {
     }
 
 }
-
 
 extension NightscoutService: RemoteDataService {
 
@@ -431,7 +428,6 @@ extension NightscoutService: RemoteDataService {
 
 }
 
-
 private extension Array where Element == RepeatingScheduleValue<Double> {
     func scheduleItems() -> [ProfileSet.ScheduleItem] {
         return map { (item) -> ProfileSet.ScheduleItem in
@@ -520,7 +516,6 @@ private extension LoopKit.TemporaryScheduleOverridePreset {
     }
 }
 
-
 extension KeychainManager {
 
     func setNightscoutCredentials(siteURL: URL? = nil, apiSecret: String? = nil) throws {
@@ -542,6 +537,5 @@ extension KeychainManager {
     }
 
 }
-
 
 fileprivate let NightscoutAPIAccount = "NightscoutAPI"

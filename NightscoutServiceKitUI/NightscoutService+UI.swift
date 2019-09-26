@@ -10,7 +10,6 @@ import LoopKit
 import LoopKitUI
 import NightscoutServiceKit
 
-
 extension NightscoutService: ServiceUI {
 
     public static func setupViewController() -> (UIViewController & ServiceNotifying & CompletionNotifying)? {

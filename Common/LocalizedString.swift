@@ -8,13 +8,11 @@
 
 import Foundation
 
-
 private class FrameworkBundle {
 
     static let main = Bundle(for: FrameworkBundle.self)
 
 }
-
 
 func LocalizedString(_ key: String, tableName: String? = nil, value: String? = nil, comment: String) -> String {
     if let value = value {

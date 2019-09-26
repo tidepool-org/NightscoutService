@@ -8,7 +8,6 @@
 
 import HealthKit
 
-
 extension HKUnit {
 
     static let milligramsPerDeciliter: HKUnit = {
