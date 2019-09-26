@@ -119,7 +119,7 @@ extension NightscoutService {
 }
 
 
-extension NightscoutService: RemoteData {
+extension NightscoutService: RemoteDataService {
 
     public func uploadSettings(_ settings: Settings, lastUpdated: Date) {
         guard let uploader = uploader,
