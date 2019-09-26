@@ -15,10 +15,8 @@
 		A90E39A922BC7AD10016DFE8 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90E39A822BC7AD10016DFE8 /* Bundle.swift */; };
 		A915719E23329845005429E1 /* DiagnosticLog+Subsystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915719D23329845005429E1 /* DiagnosticLog+Subsystem.swift */; };
 		A91BAC2522BC691A00ABF1BB /* NightscoutServiceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC1B22BC691A00ABF1BB /* NightscoutServiceKit.framework */; };
-		A91BAC2A22BC691A00ABF1BB /* NightscoutServiceKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91BAC2922BC691A00ABF1BB /* NightscoutServiceKitTests.swift */; };
 		A91BAC2C22BC691A00ABF1BB /* NightscoutServiceKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A91BAC1E22BC691A00ABF1BB /* NightscoutServiceKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91BAC4322BC69B500ABF1BB /* NightscoutServiceKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC3A22BC69B500ABF1BB /* NightscoutServiceKitUI.framework */; };
-		A91BAC4822BC69B500ABF1BB /* NightscoutServiceKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91BAC4722BC69B500ABF1BB /* NightscoutServiceKitUITests.swift */; };
 		A91BAC4A22BC69B500ABF1BB /* NightscoutServiceKitUI.h in Headers */ = {isa = PBXBuildFile; fileRef = A91BAC3C22BC69B500ABF1BB /* NightscoutServiceKitUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91BAC5722BC6D9A00ABF1BB /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC5622BC6D9A00ABF1BB /* LoopKit.framework */; };
 		A91BAC5822BC6DA700ABF1BB /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC5622BC6D9A00ABF1BB /* LoopKit.framework */; };
@@ -81,13 +79,11 @@
 		A91BAC1E22BC691A00ABF1BB /* NightscoutServiceKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutServiceKit.h; sourceTree = "<group>"; };
 		A91BAC1F22BC691A00ABF1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A91BAC2422BC691A00ABF1BB /* NightscoutServiceKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NightscoutServiceKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A91BAC2922BC691A00ABF1BB /* NightscoutServiceKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutServiceKitTests.swift; sourceTree = "<group>"; };
 		A91BAC2B22BC691A00ABF1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A91BAC3A22BC69B500ABF1BB /* NightscoutServiceKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NightscoutServiceKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A91BAC3C22BC69B500ABF1BB /* NightscoutServiceKitUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutServiceKitUI.h; sourceTree = "<group>"; };
 		A91BAC3D22BC69B500ABF1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A91BAC4222BC69B500ABF1BB /* NightscoutServiceKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NightscoutServiceKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A91BAC4722BC69B500ABF1BB /* NightscoutServiceKitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutServiceKitUITests.swift; sourceTree = "<group>"; };
 		A91BAC4922BC69B500ABF1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A91BAC5622BC6D9A00ABF1BB /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A91BAC5922BC6DA800ABF1BB /* LoopKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoopKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,7 +94,6 @@
 		A9B007B222BD6FF7000131DE /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		A9B007BC22BD7120000131DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B007BF22BD7130000131DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
-		A9B007D522BD7168000131DE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B007D622BD716A000131DE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A9B007D722BD716B000131DE /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B007D822BD716C000131DE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -108,7 +103,6 @@
 		A9B007DC22BD7170000131DE /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B007DD22BD7171000131DE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B007DE22BD7171000131DE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		A9B007DF22BD7175000131DE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B007E022BD7176000131DE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A9B007E122BD7177000131DE /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B007E222BD7179000131DE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -224,7 +218,6 @@
 			isa = PBXGroup;
 			children = (
 				A91BAC2B22BC691A00ABF1BB /* Info.plist */,
-				A91BAC2922BC691A00ABF1BB /* NightscoutServiceKitTests.swift */,
 			);
 			path = NightscoutServiceKitTests;
 			sourceTree = "<group>";
@@ -248,7 +241,6 @@
 			isa = PBXGroup;
 			children = (
 				A91BAC4922BC69B500ABF1BB /* Info.plist */,
-				A91BAC4722BC69B500ABF1BB /* NightscoutServiceKitUITests.swift */,
 			);
 			path = NightscoutServiceKitUITests;
 			sourceTree = "<group>";
@@ -542,7 +534,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A91BAC2A22BC691A00ABF1BB /* NightscoutServiceKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,7 +555,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A91BAC4822BC69B500ABF1BB /* NightscoutServiceKitUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,7 +583,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				A9B007BC22BD7120000131DE /* Base */,
-				A9B007D522BD7168000131DE /* en */,
 				A9B007D622BD716A000131DE /* zh-Hans */,
 				A9B007D722BD716B000131DE /* nl */,
 				A9B007D822BD716C000131DE /* fr */,
@@ -611,7 +600,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				A9B007BF22BD7130000131DE /* Base */,
-				A9B007DF22BD7175000131DE /* en */,
 				A9B007E022BD7176000131DE /* zh-Hans */,
 				A9B007E122BD7177000131DE /* nl */,
 				A9B007E222BD7179000131DE /* fr */,
