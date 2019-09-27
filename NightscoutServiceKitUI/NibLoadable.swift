@@ -8,13 +8,11 @@
 
 import UIKit
 
-
 protocol NibLoadable: IdentifiableClass {
 
     static func nib() -> UINib
 
 }
-
 
 extension NibLoadable {
 

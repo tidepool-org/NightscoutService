@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 extension UIColor {
 
     @nonobjc static let delete = UIColor.HIGRedColor()

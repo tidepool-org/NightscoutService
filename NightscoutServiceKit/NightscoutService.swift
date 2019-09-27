@@ -11,7 +11,6 @@ import LoopKit
 import NightscoutUploadKit
 import os.log
 
-
 public final class NightscoutService: Service {
 
     public static let managerIdentifier = "NightscoutService"
@@ -68,10 +67,10 @@ public final class NightscoutService: Service {
         return [:]
     }
 
-    public var hasValidConfiguration: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
+    public var hasConfiguration: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
 
     public func verifyConfiguration(completion: @escaping (Error?) -> Void) {
-        guard hasValidConfiguration, let siteURL = siteURL, let apiSecret = apiSecret else {
+        guard hasConfiguration, let siteURL = siteURL, let apiSecret = apiSecret else {
             return
         }
 
@@ -79,21 +78,18 @@ public final class NightscoutService: Service {
         uploader.checkAuth(completion)
     }
 
-    public func notifyCreated(completion: @escaping () -> Void) {
+    public func completeCreate() {
         try? KeychainManager().setNightscoutCredentials(siteURL: siteURL, apiSecret: apiSecret)
         createUploader()
-        notifyDelegateOfCreation(completion: completion)
     }
 
-    public func notifyUpdated(completion: @escaping () -> Void) {
+    public func completeUpdate() {
         try? KeychainManager().setNightscoutCredentials(siteURL: siteURL, apiSecret: apiSecret)
         createUploader()
-        notifyDelegateOfUpdation(completion: completion)
     }
 
-    public func notifyDeleted(completion: @escaping () -> Void) {
+    public func completeDelete() {
         try? KeychainManager().setNightscoutCredentials()
-        notifyDelegateOfDeletion(completion: completion)
     }
 
     private func createUploader() {
@@ -107,7 +103,6 @@ public final class NightscoutService: Service {
 
 }
 
-
 extension NightscoutService {
 
     public var debugDescription: String {
@@ -118,8 +113,7 @@ extension NightscoutService {
 
 }
 
-
-extension NightscoutService: RemoteData {
+extension NightscoutService: RemoteDataService {
 
     public func uploadSettings(_ settings: Settings, lastUpdated: Date) {
         guard let uploader = uploader,
@@ -434,7 +428,6 @@ extension NightscoutService: RemoteData {
 
 }
 
-
 private extension Array where Element == RepeatingScheduleValue<Double> {
     func scheduleItems() -> [ProfileSet.ScheduleItem] {
         return map { (item) -> ProfileSet.ScheduleItem in
@@ -523,7 +516,6 @@ private extension LoopKit.TemporaryScheduleOverridePreset {
     }
 }
 
-
 extension KeychainManager {
 
     func setNightscoutCredentials(siteURL: URL? = nil, apiSecret: String? = nil) throws {
@@ -545,6 +537,5 @@ extension KeychainManager {
     }
 
 }
-
 
 fileprivate let NightscoutAPIAccount = "NightscoutAPI"

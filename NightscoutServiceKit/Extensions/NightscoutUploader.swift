@@ -9,7 +9,6 @@
 import LoopKit
 import NightscoutUploadKit
 
-
 extension NightscoutUploader {
 
     static let log = DiagnosticLog(category: "NightscoutUploader")
@@ -70,7 +69,6 @@ extension NightscoutUploader {
     }
     
 }
-
 
 extension NightscoutUploader {
 

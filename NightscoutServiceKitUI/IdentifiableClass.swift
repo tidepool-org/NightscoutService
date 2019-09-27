@@ -8,13 +8,11 @@
 
 import Foundation
 
-
 protocol IdentifiableClass: class {
 
     static var className: String { get }
 
 }
-
 
 extension IdentifiableClass {
 
