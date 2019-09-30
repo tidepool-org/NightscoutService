@@ -310,7 +310,7 @@ extension NightscoutService: RemoteDataService {
         if uploaderDevice.isBatteryMonitoringEnabled {
             battery = Int(uploaderDevice.batteryLevel * 100)
         } else {
-            battery = nil
+            battery = 0   // Nightscout does not handle missing uploader status battery
         }
         return UploaderStatus(name: uploaderDevice.name, timestamp: Date(), battery: battery)
     }
