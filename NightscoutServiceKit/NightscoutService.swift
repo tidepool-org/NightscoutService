@@ -13,29 +13,9 @@ import os.log
 
 public final class NightscoutService: Service {
 
-    public static let managerIdentifier = "NightscoutService"
+    public static let serviceIdentifier = "NightscoutService"
 
     public static let localizedTitle = LocalizedString("Nightscout", comment: "The title of the Nightscout service")
-
-    public var delegateQueue: DispatchQueue! {
-        get {
-            return delegate.queue
-        }
-        set {
-            delegate.queue = newValue
-        }
-    }
-
-    public weak var serviceDelegate: ServiceDelegate? {
-        get {
-            return delegate.delegate
-        }
-        set {
-            delegate.delegate = newValue
-        }
-    }
-
-    private let delegate = WeakSynchronizedDelegate<ServiceDelegate>()
 
     public var siteURL: URL?
 
@@ -99,16 +79,6 @@ public final class NightscoutService: Service {
         } else {
             uploader = nil
         }
-    }
-
-}
-
-extension NightscoutService {
-
-    public var debugDescription: String {
-        return """
-        ## NightscoutService
-        """
     }
 
 }
