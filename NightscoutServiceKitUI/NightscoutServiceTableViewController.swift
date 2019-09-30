@@ -11,14 +11,22 @@ import LoopKit
 import LoopKitUI
 import NightscoutServiceKit
 
-final class NightscoutServiceTableViewController: ServiceTableViewController, UITextFieldDelegate {
+final class NightscoutServiceTableViewController: UITableViewController, UITextFieldDelegate {
 
-    private let nightscoutService: NightscoutService
+    public enum Operation {
+        case create
+        case update
+    }
 
-    init(nightscoutService: NightscoutService, for operation: Operation) {
-        self.nightscoutService = nightscoutService
+    private let service: NightscoutService
 
-        super.init(service: nightscoutService, for: operation)
+    private let operation: Operation
+
+    init(service: NightscoutService, for operation: Operation) {
+        self.service = service
+        self.operation = operation
+
+        super.init(style: .grouped)
     }
 
     required init?(coder: NSCoder) {
@@ -30,6 +38,80 @@ final class NightscoutServiceTableViewController: ServiceTableViewController, UI
 
         tableView.register(AuthenticationTableViewCell.nib(), forCellReuseIdentifier: AuthenticationTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
+
+        title = service.localizedTitle
+
+        if operation == .create {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+
+        updateButtonStates()
+    }
+
+    private func updateButtonStates() {
+        navigationItem.rightBarButtonItem?.isEnabled = service.hasConfiguration
+    }
+
+    @objc private func cancel() {
+        view.endEditing(true)
+
+        notifyComplete()
+    }
+
+    @objc private func done() {
+        view.endEditing(true)
+
+        UIView.animate(withDuration: 0.25, animations: {
+            self.navigationItem.titleView = ValidatingIndicatorView(frame: CGRect.zero)
+        })
+
+        service.verifyConfiguration { error in
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.25, animations: {
+                    self.navigationItem.titleView = nil
+                })
+
+                if let error = error {
+                    self.present(UIAlertController(with: error), animated: true)
+                    return
+                }
+
+                switch self.operation {
+                case .create:
+                    self.service.completeCreate()
+                    if let serviceViewController = self.navigationController as? ServiceViewController {
+                        serviceViewController.notifyServiceCreated(self.service)
+                    }
+                case .update:
+                    self.service.completeUpdate()
+                    if let serviceViewController = self.navigationController as? ServiceViewController {
+                        serviceViewController.notifyServiceUpdated(self.service)
+                    }
+                }
+                self.notifyComplete()
+            }
+        }
+    }
+
+    private func confirmDeletion(completion: (() -> Void)? = nil) {
+        view.endEditing(true)
+
+        let alert = UIAlertController(serviceDeletionHandler: {
+            self.service.completeDelete()
+            if let serviceViewController = self.navigationController as? ServiceViewController {
+                serviceViewController.notifyServiceDeleted(self.service)
+            }
+            self.notifyComplete()
+        })
+
+        present(alert, animated: true, completion: completion)
+    }
+
+    private func notifyComplete() {
+        if let serviceViewController = navigationController as? ServiceViewController {
+            serviceViewController.notifyComplete()
+        }
     }
 
     // MARK: - Data Source
@@ -80,7 +162,7 @@ final class NightscoutServiceTableViewController: ServiceTableViewController, UI
             case .siteURL:
                 let cell = tableView.dequeueReusableCell(withIdentifier: AuthenticationTableViewCell.className, for: indexPath) as! AuthenticationTableViewCell
                 cell.titleLabel.text = LocalizedString("Site URL", comment: "The title of the Nightscout site URL")
-                cell.textField.text = nightscoutService.siteURL?.absoluteString
+                cell.textField.text = service.siteURL?.absoluteString
                 cell.textField.keyboardType = .URL
                 cell.textField.placeholder = LocalizedString("https://mysite.herokuapp.com", comment: "The placeholder text for the Nightscout site URL")
                 cell.textField.returnKeyType = .next
@@ -89,7 +171,7 @@ final class NightscoutServiceTableViewController: ServiceTableViewController, UI
             case .apiSecret:
                 let cell = tableView.dequeueReusableCell(withIdentifier: AuthenticationTableViewCell.className, for: indexPath) as! AuthenticationTableViewCell
                 cell.titleLabel.text = LocalizedString("API Secret", comment: "The title of the Nightscout API secret")
-                cell.textField.text = nightscoutService.apiSecret
+                cell.textField.text = service.apiSecret
                 cell.textField.keyboardType = .asciiCapable
                 cell.textField.placeholder = LocalizedString("Required", comment: "The default placeholder for required text")
                 cell.textField.returnKeyType = .done
@@ -131,9 +213,9 @@ final class NightscoutServiceTableViewController: ServiceTableViewController, UI
         case .credentials:
             switch Credentials(rawValue: indexPath.row)! {
             case .siteURL:
-                nightscoutService.siteURL = URL(http: text)
+                service.siteURL = URL(http: text)
             case .apiSecret:
-                nightscoutService.apiSecret = text
+                service.apiSecret = text
             }
         case .deleteService:
             break
@@ -182,3 +264,26 @@ extension AuthenticationTableViewCell: IdentifiableClass {}
 extension AuthenticationTableViewCell: NibLoadable {}
 
 extension TextButtonTableViewCell: IdentifiableClass {}
+
+fileprivate extension UIAlertController {
+
+    convenience init(serviceDeletionHandler handler: @escaping () -> Void) {
+        self.init(
+            title: nil,
+            message: NSLocalizedString("Are you sure you want to delete this service?", comment: "Confirmation message for deleting a service"),
+            preferredStyle: .actionSheet
+        )
+
+        addAction(UIAlertAction(
+            title: NSLocalizedString("Delete Service", comment: "Button title to delete a service"),
+            style: .destructive,
+            handler: { _ in
+                handler()
+        }
+        ))
+
+        let cancel = NSLocalizedString("Cancel", comment: "The title of the cancel action in an action sheet")
+        addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
+    }
+
+}
