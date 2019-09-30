@@ -13,11 +13,11 @@ import NightscoutServiceKit
 extension NightscoutService: ServiceUI {
 
     public static func setupViewController() -> (UIViewController & ServiceSetupNotifying & CompletionNotifying)? {
-        return ServiceViewController(rootViewController: NightscoutServiceTableViewController(nightscoutService: NightscoutService(), for: .create))
+        return ServiceViewController(rootViewController: NightscoutServiceTableViewController(service: NightscoutService(), for: .create))
     }
 
     public func settingsViewController() -> (UIViewController & ServiceSetupNotifying & CompletionNotifying) {
-      return ServiceViewController(rootViewController: NightscoutServiceTableViewController(nightscoutService: self, for: .update))
+      return ServiceViewController(rootViewController: NightscoutServiceTableViewController(service: self, for: .update))
     }
 
 }
