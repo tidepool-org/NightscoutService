@@ -440,9 +440,9 @@ private extension LoopKit.TemporaryScheduleOverride.Context {
         case .custom:
             return nil
         case .legacyWorkout:
-            return NSLocalizedString("Workout", comment: "Name uploaded to Nightscout for legacy workout override")
+            return LocalizedString("Workout", comment: "Name uploaded to Nightscout for legacy workout override")
         case .preMeal:
-            return NSLocalizedString("Pre-Meal", comment: "Name uploaded to Nightscout for Pre-Meal override")
+            return LocalizedString("Pre-Meal", comment: "Name uploaded to Nightscout for Pre-Meal override")
         case .preset(let preset):
             return preset.name
         }
