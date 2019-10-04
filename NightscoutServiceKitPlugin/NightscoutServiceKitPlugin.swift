@@ -11,7 +11,6 @@ import LoopKitUI
 import NightscoutServiceKit
 import NightscoutServiceKitUI
 
-
 class NightscoutServiceKitPlugin: NSObject, ServiceUIPlugin {
 
     private let log = OSLog(category: "NightscoutServiceKitPlugin")
