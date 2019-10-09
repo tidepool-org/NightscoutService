@@ -11,90 +11,112 @@ import NightscoutUploadKit
 
 extension NightscoutUploader {
 
-    static let log = DiagnosticLog(category: "NightscoutUploader")
+    func uploadCarbEntries(_ entries: [StoredCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard !entries.isEmpty else {
+            completion(.success(false))
+            return
+        }
 
-    func uploadCarbEntries(_ entries: [StoredCarbEntry], completion: @escaping ([StoredCarbEntry]) -> Void) {
-        var created = [StoredCarbEntry]()
-        var modified = [StoredCarbEntry]()
+        var created = [MealBolusNightscoutTreatment]()
+        var modified = [MealBolusNightscoutTreatment]()
 
         for entry in entries {
+            let treatment = MealBolusNightscoutTreatment(carbEntry: entry)
             if entry.externalID != nil {
-                modified.append(entry)
+                modified.append(treatment)
             } else {
-                created.append(entry)
+                created.append(treatment)
             }
         }
 
-        upload(created.map { MealBolusNightscoutTreatment(carbEntry: $0) }) { (result) in
+        upload(created) { result in
             switch result {
-            case .success(let ids):
-                for (index, id) in ids.enumerated() {
-                    created[index].externalID = id
-                    created[index].isUploaded = true
-                }
-                completion(created)
             case .failure(let error):
-                NightscoutUploader.log.error("%{public}@", String(describing: error))
-                completion(created)
-            }
-        }
-
-        modifyTreatments(modified.map { MealBolusNightscoutTreatment(carbEntry: $0) }) { (error) in
-            if let error = error {
-                NightscoutUploader.log.error("%{public}@", String(describing: error))
-            } else {
-                for index in modified.startIndex..<modified.endIndex {
-                    modified[index].isUploaded = true
+                completion(.failure(error))
+            case .success:
+                self.modifyTreatments(modified) { error in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(true))
+                    }
                 }
             }
-
-            completion(modified)
         }
     }
 
-    func deleteCarbEntries(_ entries: [DeletedCarbEntry], completion: @escaping ([DeletedCarbEntry]) -> Void) {
-        var deleted = entries
+    func deleteCarbEntries(_ entries: [DeletedCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard !entries.isEmpty else {
+            completion(.success(false))
+            return
+        }
 
-        deleteTreatmentsById(deleted.map { $0.externalID }) { (error) in
+        let ids = entries.compactMap { $0.nightscoutIdentifier }
+
+        deleteTreatmentsByClientId(ids) { error in
             if let error = error {
-                NightscoutUploader.log.error("%{public}@", String(describing: error))
+                completion(.failure(error))
             } else {
-                for index in deleted.startIndex..<deleted.endIndex {
-                    deleted[index].isUploaded = true
-                }
+                completion(.success(true))
             }
-
-            completion(deleted)
         }
     }
-    
+
 }
 
 extension NightscoutUploader {
 
-    func upload(_ events: [PersistedPumpEvent], fromSource source: String, completion: @escaping (Result<[URL], Error>) -> Void) {
-        var objectIDURLs = [URL]()
-        var treatments = [NightscoutTreatment]()
-
-        for event in events {
-
-            objectIDURLs.append(event.objectIDURL)
-
-            guard let treatment = event.treatment(enteredBy: source) else {
-                continue
-            }
-
-            treatments.append(treatment)
+    func uploadGlucoseSamples(_ samples: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard !samples.isEmpty else {
+            completion(.success(false))
+            return
         }
 
-        self.upload(treatments) { (result) in
+        uploadEntries(samples.compactMap { NightscoutEntry(storedGlucoseSample: $0) }) { result in
             switch result {
-            case .success( _):
-                completion(.success(objectIDURLs))
             case .failure(let error):
                 completion(.failure(error))
+            case .success:
+                completion(.success(true))
             }
         }
+    }
+
+}
+
+extension NightscoutUploader {
+
+    func uploadDoses(_ doses: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard !doses.isEmpty else {
+            completion(.success(false))
+            return
+        }
+
+        let source = "loop://\(UIDevice.current.name)"
+        self.upload(doses.compactMap { $0.treatment(enteredBy: source) }) { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success:
+                completion(.success(true))
+            }
+        }
+    }
+
+}
+
+extension StoredCarbEntry {
+
+    var nightscoutIdentifier: String {
+        return externalID ?? syncIdentifier ?? sampleUUID.uuidString
+    }
+
+}
+
+extension DeletedCarbEntry {
+
+    var nightscoutIdentifier: String? {
+        return externalID ?? syncIdentifier ?? uuid?.uuidString
     }
 
 }

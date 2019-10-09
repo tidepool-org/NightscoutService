@@ -170,6 +170,7 @@ final class NightscoutServiceTableViewController: UITableViewController, UITextF
                 cell.titleLabel.text = LocalizedString("API Secret", comment: "The title of the Nightscout API secret")
                 cell.textField.text = service.apiSecret
                 cell.textField.keyboardType = .asciiCapable
+                cell.textField.isSecureTextEntry = true
                 cell.textField.placeholder = LocalizedString("Required", comment: "The default placeholder for required text")
                 cell.textField.returnKeyType = .done
                 cell.textField.delegate = self
