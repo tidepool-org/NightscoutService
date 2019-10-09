@@ -25,6 +25,10 @@
 		A91BAC5C22BC6DE000ABF1BB /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC5622BC6D9A00ABF1BB /* LoopKit.framework */; };
 		A91BAC5D22BC6E1500ABF1BB /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC5622BC6D9A00ABF1BB /* LoopKit.framework */; };
 		A91BAC5E22BC6E1500ABF1BB /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC5922BC6DA800ABF1BB /* LoopKitUI.framework */; };
+		A934B6162358F42A00949C8B /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A934B6152358F42A00949C8B /* DeviceStatus.swift */; };
+		A934B6182358F49300949C8B /* ProfileSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A934B6172358F49300949C8B /* ProfileSet.swift */; };
+		A934B61A2358F5FC00949C8B /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = A934B6192358F5FC00949C8B /* TemporaryScheduleOverride.swift */; };
+		A94DA7642353CF930082E26D /* NightscoutEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94DA7632353CF930082E26D /* NightscoutEntry.swift */; };
 		A993990322BC7095005E39D3 /* NightscoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A993990222BC7095005E39D3 /* NightscoutService.swift */; };
 		A993990522BC70B7005E39D3 /* NightscoutService+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A993990422BC70B7005E39D3 /* NightscoutService+UI.swift */; };
 		A993990722BC70C9005E39D3 /* NightscoutServiceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A993990622BC70C9005E39D3 /* NightscoutServiceTableViewController.swift */; };
@@ -104,6 +108,10 @@
 		A91BAC4922BC69B500ABF1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A91BAC5622BC6D9A00ABF1BB /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A91BAC5922BC6DA800ABF1BB /* LoopKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoopKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A934B6152358F42A00949C8B /* DeviceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
+		A934B6172358F49300949C8B /* ProfileSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSet.swift; sourceTree = "<group>"; };
+		A934B6192358F5FC00949C8B /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
+		A94DA7632353CF930082E26D /* NightscoutEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutEntry.swift; sourceTree = "<group>"; };
 		A993990222BC7095005E39D3 /* NightscoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutService.swift; sourceTree = "<group>"; };
 		A993990422BC70B7005E39D3 /* NightscoutService+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NightscoutService+UI.swift"; sourceTree = "<group>"; };
 		A993990622BC70C9005E39D3 /* NightscoutServiceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutServiceTableViewController.swift; sourceTree = "<group>"; };
@@ -195,12 +203,16 @@
 			isa = PBXGroup;
 			children = (
 				A90E39A822BC7AD10016DFE8 /* Bundle.swift */,
+				A934B6152358F42A00949C8B /* DeviceStatus.swift */,
+				A915719D23329845005429E1 /* DiagnosticLog+Subsystem.swift */,
 				A90E39A622BC7A360016DFE8 /* HKUnit.swift */,
 				A90E39A222BC782C0016DFE8 /* MealBolusNightscoutTreatment.swift */,
+				A94DA7632353CF930082E26D /* NightscoutEntry.swift */,
 				A90E39A022BC773A0016DFE8 /* NightscoutUploader.swift */,
 				A90E39A422BC791E0016DFE8 /* PersistedPumpEvent.swift */,
+				A934B6172358F49300949C8B /* ProfileSet.swift */,
+				A934B6192358F5FC00949C8B /* TemporaryScheduleOverride.swift */,
 				A90E399D22BC76DB0016DFE8 /* TimeInterval.swift */,
-				A915719D23329845005429E1 /* DiagnosticLog+Subsystem.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -619,14 +631,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				A993990322BC7095005E39D3 /* NightscoutService.swift in Sources */,
+				A934B6162358F42A00949C8B /* DeviceStatus.swift in Sources */,
 				A90E39A922BC7AD10016DFE8 /* Bundle.swift in Sources */,
 				A90E39A322BC782C0016DFE8 /* MealBolusNightscoutTreatment.swift in Sources */,
+				A934B61A2358F5FC00949C8B /* TemporaryScheduleOverride.swift in Sources */,
 				A915719E23329845005429E1 /* DiagnosticLog+Subsystem.swift in Sources */,
+				A94DA7642353CF930082E26D /* NightscoutEntry.swift in Sources */,
 				A90E39A722BC7A360016DFE8 /* HKUnit.swift in Sources */,
 				A90E399E22BC76DB0016DFE8 /* TimeInterval.swift in Sources */,
 				A90E39A122BC773A0016DFE8 /* NightscoutUploader.swift in Sources */,
 				A9B007B322BD6FF7000131DE /* LocalizedString.swift in Sources */,
 				A90E39A522BC791E0016DFE8 /* PersistedPumpEvent.swift in Sources */,
+				A934B6182358F49300949C8B /* ProfileSet.swift in Sources */,
 				A9C62DA42331CAD400535612 /* OSLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
