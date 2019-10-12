@@ -17,6 +17,8 @@ public final class NightscoutService: Service {
 
     public static let localizedTitle = LocalizedString("Nightscout", comment: "The title of the Nightscout service")
 
+    public var serviceDelegate: ServiceDelegate?
+
     public var siteURL: URL?
 
     public var apiSecret: String?
@@ -66,6 +68,7 @@ public final class NightscoutService: Service {
     public func completeUpdate() {
         try? KeychainManager().setNightscoutCredentials(siteURL: siteURL, apiSecret: apiSecret)
         createUploader()
+        serviceDelegate?.serviceDidUpdate(self)
     }
 
     public func completeDelete() {

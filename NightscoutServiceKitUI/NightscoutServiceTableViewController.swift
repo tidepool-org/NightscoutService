@@ -85,9 +85,6 @@ final class NightscoutServiceTableViewController: UITableViewController, UITextF
                     }
                 case .update:
                     self.service.completeUpdate()
-                    if let serviceViewController = self.navigationController as? ServiceViewController {
-                        serviceViewController.notifyServiceUpdated(self.service)
-                    }
                 }
                 self.notifyComplete()
             }
