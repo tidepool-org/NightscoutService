@@ -17,7 +17,7 @@ public final class NightscoutService: Service {
 
     public static let localizedTitle = LocalizedString("Nightscout", comment: "The title of the Nightscout service")
 
-    public var serviceDelegate: ServiceDelegate?
+    public weak var serviceDelegate: ServiceDelegate?
 
     public var siteURL: URL?
 
