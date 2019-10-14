@@ -68,7 +68,7 @@ public final class NightscoutService: Service {
     public func completeUpdate() {
         try? KeychainManager().setNightscoutCredentials(siteURL: siteURL, apiSecret: apiSecret)
         createUploader()
-        serviceDelegate?.serviceDidUpdate(self)
+        serviceDelegate?.serviceDidUpdateState(self)
     }
 
     public func completeDelete() {
