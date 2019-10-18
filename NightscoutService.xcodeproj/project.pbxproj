@@ -600,6 +600,7 @@
 			inputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/NightscoutServiceKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/NightscoutServiceKitUI.framework",
+				"$(BUILT_PRODUCTS_DIR)/NightscoutUploadKit.framework",
 			);
 			name = "Copy Frameworks with Carthage";
 			outputFileListPaths = (
