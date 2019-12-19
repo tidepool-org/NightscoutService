@@ -86,14 +86,14 @@ extension NightscoutUploader {
 
 extension NightscoutUploader {
 
-    func uploadPumpEvents(_ events: [PersistedPumpEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard !events.isEmpty else {
+    func uploadDoses(_ doses: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard !doses.isEmpty else {
             completion(.success(false))
             return
         }
 
         let source = "loop://\(UIDevice.current.name)"
-        self.upload(events.compactMap { $0.treatment(enteredBy: source) }) { (result) in
+        self.upload(doses.compactMap { $0.treatment(enteredBy: source) }) { (result) in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
