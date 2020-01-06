@@ -80,9 +80,9 @@ public final class NightscoutService: Service {
 
 extension NightscoutService: RemoteDataService {
 
-    public var carbDataLimit: Int { return 1000 }
+    public var carbDataLimit: Int? { return 1000 }
 
-    public func synchronizeCarbData(deleted: [DeletedCarbEntry], stored: [StoredCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadCarbData(deleted: [DeletedCarbEntry], stored: [StoredCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
         activeUploader!.deleteCarbEntries(deleted) { result in
             switch result {
             case .failure(let error):
@@ -100,33 +100,33 @@ extension NightscoutService: RemoteDataService {
         }
     }
 
-    public var doseDataLimit: Int { return 1000 }
+    public var doseDataLimit: Int? { return 1000 }
 
-    public func synchronizeDoseData(_ stored: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadDoseData(_ stored: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
         activeUploader!.uploadDoses(stored, completion: completion)
     }
 
-    public var glucoseDataLimit: Int { return 1000 }
+    public var glucoseDataLimit: Int? { return 1000 }
 
-    public func synchronizeGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
         activeUploader!.uploadGlucoseSamples(stored, completion: completion)
     }
 
-    public var pumpEventDataLimit: Int { return 1000 }
+    public var pumpEventDataLimit: Int? { return 1000 }
 
-    public func synchronizePumpEventData(_ stored: [PersistedPumpEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadPumpEventData(_ stored: [PersistedPumpEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
         completion(.success(false))
     }
 
-    public var settingsDataLimit: Int { return 1000 }
+    public var settingsDataLimit: Int? { return 1000 }
 
-    public func synchronizeSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
         activeUploader!.uploadProfiles(stored.compactMap { ProfileSet(storedSettings: $0) }, completion: completion)
     }
 
-    public var statusDataLimit: Int { return 1000 }
+    public var statusDataLimit: Int? { return 1000 }
 
-    public func synchronizeStatusData(_ stored: [StoredStatus], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadStatusData(_ stored: [StoredStatus], completion: @escaping (Result<Bool, Error>) -> Void) {
         activeUploader!.uploadDeviceStatuses(stored.map { DeviceStatus(storedStatus: $0) }, completion: completion)
     }
 
