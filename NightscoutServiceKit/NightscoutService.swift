@@ -23,7 +23,12 @@ public final class NightscoutService: Service {
 
     public var apiSecret: String?
 
-    private var uploader: NightscoutUploader?
+    private lazy var uploader: NightscoutUploader! = {
+        guard let siteURL = siteURL, let apiSecret = apiSecret else {
+            return nil
+        }
+        return NightscoutUploader(siteURL: siteURL, APISecret: apiSecret)
+    }()
 
     private let log = OSLog(category: "NightscoutService")
 
@@ -83,12 +88,12 @@ extension NightscoutService: RemoteDataService {
     public var carbDataLimit: Int? { return 1000 }
 
     public func uploadCarbData(deleted: [DeletedCarbEntry], stored: [StoredCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
-        activeUploader!.deleteCarbEntries(deleted) { result in
+        uploader.deleteCarbEntries(deleted) { result in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let uploadedDeleted):
-                self.activeUploader!.uploadCarbEntries(stored) { result in
+                self.uploader.uploadCarbEntries(stored) { result in
                     switch result {
                     case .failure(let error):
                         completion(.failure(error))
@@ -103,19 +108,19 @@ extension NightscoutService: RemoteDataService {
     public var doseDataLimit: Int? { return 1000 }
 
     public func uploadDoseData(_ stored: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
-        activeUploader!.uploadDoses(stored, completion: completion)
+        uploader.uploadDoses(stored, completion: completion)
     }
 
     public var dosingDecisionDataLimit: Int? { return 1000 }
 
     public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
-        activeUploader!.uploadDeviceStatuses(stored.map { DeviceStatus(storedDosingDecision: $0) }, completion: completion)
+        uploader.uploadDeviceStatuses(stored.map { DeviceStatus(storedDosingDecision: $0) }, completion: completion)
     }
 
     public var glucoseDataLimit: Int? { return 1000 }
 
     public func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
-        activeUploader!.uploadGlucoseSamples(stored, completion: completion)
+        uploader.uploadGlucoseSamples(stored, completion: completion)
     }
 
     public var pumpEventDataLimit: Int? { return 1000 }
@@ -127,17 +132,7 @@ extension NightscoutService: RemoteDataService {
     public var settingsDataLimit: Int? { return 1000 }
 
     public func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
-        activeUploader!.uploadProfiles(stored.compactMap { ProfileSet(storedSettings: $0) }, completion: completion)
-    }
-
-
-    private var activeUploader: NightscoutUploader? {
-        if uploader == nil {
-            if let siteURL = siteURL, let apiSecret = apiSecret {
-                self.uploader = NightscoutUploader(siteURL: siteURL, APISecret: apiSecret)
-            }
-        }
-        return uploader
+        uploader.uploadProfiles(stored.compactMap { ProfileSet(storedSettings: $0) }, completion: completion)
     }
 
 }
