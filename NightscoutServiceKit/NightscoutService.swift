@@ -106,6 +106,12 @@ extension NightscoutService: RemoteDataService {
         activeUploader!.uploadDoses(stored, completion: completion)
     }
 
+    public var dosingDecisionDataLimit: Int? { return 1000 }
+
+    public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
+        activeUploader!.uploadDeviceStatuses(stored.map { DeviceStatus(storedDosingDecision: $0) }, completion: completion)
+    }
+
     public var glucoseDataLimit: Int? { return 1000 }
 
     public func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
@@ -124,11 +130,6 @@ extension NightscoutService: RemoteDataService {
         activeUploader!.uploadProfiles(stored.compactMap { ProfileSet(storedSettings: $0) }, completion: completion)
     }
 
-    public var statusDataLimit: Int? { return 1000 }
-
-    public func uploadStatusData(_ stored: [StoredStatus], completion: @escaping (Result<Bool, Error>) -> Void) {
-        activeUploader!.uploadDeviceStatuses(stored.map { DeviceStatus(storedStatus: $0) }, completion: completion)
-    }
 
     private var activeUploader: NightscoutUploader? {
         if uploader == nil {

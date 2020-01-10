@@ -13,30 +13,30 @@ import NightscoutUploadKit
 
 extension DeviceStatus {
 
-    init(storedStatus: StoredStatus) {
+    init(storedDosingDecision: StoredDosingDecision) {
         var iob: IOBStatus?
-        if let insulinOnBoard = storedStatus.insulinOnBoard {
+        if let insulinOnBoard = storedDosingDecision.insulinOnBoard {
             iob = IOBStatus(timestamp: insulinOnBoard.startDate, iob: insulinOnBoard.value)
         }
 
         var cob: COBStatus?
-        if let carbsOnBoard = storedStatus.carbsOnBoard {
+        if let carbsOnBoard = storedDosingDecision.carbsOnBoard {
             cob = COBStatus(cob: carbsOnBoard.quantity.doubleValue(for: HKUnit.gram()), timestamp: carbsOnBoard.startDate)
         }
 
         var predicted: PredictedBG?
-        if let predictedGlucose = storedStatus.predictedGlucose, let startDate = predictedGlucose.first?.startDate {
+        if let predictedGlucose = storedDosingDecision.predictedGlucose, let startDate = predictedGlucose.first?.startDate {
             let values = predictedGlucose.map { $0.quantity }
             predicted = PredictedBG(startDate: startDate, values: values)
         }
 
         var recommended: RecommendedTempBasal?
-        if let tempBasalRecommendationDate = storedStatus.tempBasalRecommendationDate {
+        if let tempBasalRecommendationDate = storedDosingDecision.tempBasalRecommendationDate {
             recommended = RecommendedTempBasal(timestamp: tempBasalRecommendationDate.date, rate: tempBasalRecommendationDate.recommendation.unitsPerHour, duration: tempBasalRecommendationDate.recommendation.duration)
         }
 
         var loopEnacted: LoopEnacted?
-        if case .some(.tempBasal(let tempBasal)) = storedStatus.pumpManagerStatus?.basalDeliveryState /*, lastTempBasalUploaded?.startDate != tempBasal.startDate  TODO: How to address this? */ {
+        if case .some(.tempBasal(let tempBasal)) = storedDosingDecision.pumpManagerStatus?.basalDeliveryState /*, lastTempBasalUploaded?.startDate != tempBasal.startDate  TODO: How to address this? */ {
             let duration = tempBasal.endDate.timeIntervalSince(tempBasal.startDate)
             loopEnacted = LoopEnacted(rate: tempBasal.unitsPerHour, duration: duration, timestamp: tempBasal.startDate, received:
                 true)
@@ -48,11 +48,11 @@ extension DeviceStatus {
 
         //this is the only pill that has the option to modify the text
         //to do that pass a different name value instead of loopName
-        let loopStatus = LoopStatus(name: loopName, version: loopVersion, timestamp: storedStatus.date, iob: iob, cob: cob, predicted: predicted, recommendedTempBasal: recommended, recommendedBolus: storedStatus.recommendedBolus, enacted: loopEnacted, failureReason: storedStatus.error)
+        let loopStatus = LoopStatus(name: loopName, version: loopVersion, timestamp: storedDosingDecision.date, iob: iob, cob: cob, predicted: predicted, recommendedTempBasal: recommended, recommendedBolus: storedDosingDecision.recommendedBolus, enacted: loopEnacted, failureReason: storedDosingDecision.error)
 
         let pumpStatus: PumpStatus?
 
-        if let pumpManagerStatus = storedStatus.pumpManagerStatus {
+        if let pumpManagerStatus = storedDosingDecision.pumpManagerStatus {
 
             let battery: BatteryStatus?
 
@@ -70,14 +70,14 @@ extension DeviceStatus {
             }
 
             let currentReservoirUnits: Double?
-            if let lastReservoirValue = storedStatus.lastReservoirValue, lastReservoirValue.startDate > Date().addingTimeInterval(.minutes(-15)) {
+            if let lastReservoirValue = storedDosingDecision.lastReservoirValue, lastReservoirValue.startDate > Date().addingTimeInterval(.minutes(-15)) {
                 currentReservoirUnits = lastReservoirValue.unitVolume
             } else {
                 currentReservoirUnits = nil
             }
 
             pumpStatus = PumpStatus(
-                clock: storedStatus.date,
+                clock: storedDosingDecision.date,
                 pumpID: pumpManagerStatus.device.localIdentifier ?? "Unknown",
                 manufacturer: pumpManagerStatus.device.manufacturer,
                 model: pumpManagerStatus.device.model,
@@ -92,9 +92,9 @@ extension DeviceStatus {
         }
 
         let overrideStatus: NightscoutUploadKit.OverrideStatus?
-        let unit: HKUnit = storedStatus.glucoseTargetRangeSchedule?.unit ?? HKUnit.milligramsPerDeciliter
-        if let override = storedStatus.scheduleOverride, override.isActive(),
-            let range = storedStatus.glucoseTargetRangeScheduleApplyingOverrideIfActive?.value(at: storedStatus.date) {
+        let unit: HKUnit = storedDosingDecision.glucoseTargetRangeSchedule?.unit ?? HKUnit.milligramsPerDeciliter
+        if let override = storedDosingDecision.scheduleOverride, override.isActive(),
+            let range = storedDosingDecision.glucoseTargetRangeScheduleApplyingOverrideIfActive?.value(at: storedDosingDecision.date) {
             let lowerTarget = HKQuantity(unit: unit, doubleValue: range.minValue)
             let upperTarget = HKQuantity(unit: unit, doubleValue: range.maxValue)
             let correctionRange = CorrectionRange(minValue: lowerTarget, maxValue: upperTarget)
@@ -103,22 +103,22 @@ extension DeviceStatus {
             if override.duration == .indefinite {
                 duration = nil
             } else {
-                duration = round(endDate.timeIntervalSince(storedStatus.date))
+                duration = round(endDate.timeIntervalSince(storedDosingDecision.date))
             }
-            overrideStatus = NightscoutUploadKit.OverrideStatus(name: override.context.name, timestamp: storedStatus.date, active: true, currentCorrectionRange: correctionRange, duration: duration, multiplier: override.settings.insulinNeedsScaleFactor)
+            overrideStatus = NightscoutUploadKit.OverrideStatus(name: override.context.name, timestamp: storedDosingDecision.date, active: true, currentCorrectionRange: correctionRange, duration: duration, multiplier: override.settings.insulinNeedsScaleFactor)
         } else {
-            overrideStatus = NightscoutUploadKit.OverrideStatus(timestamp: storedStatus.date, active: false)
+            overrideStatus = NightscoutUploadKit.OverrideStatus(timestamp: storedDosingDecision.date, active: false)
         }
 
         let uploaderDevice = UIDevice.current
 
         let battery = uploaderDevice.isBatteryMonitoringEnabled ? Int(uploaderDevice.batteryLevel * 100) : 0
 
-        let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: storedStatus.date, battery: battery)
+        let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: storedDosingDecision.date, battery: battery)
 
         self.init(
             device: "loop://\(uploaderDevice.name)",
-            timestamp: storedStatus.date,
+            timestamp: storedDosingDecision.date,
             pumpStatus: pumpStatus,
             uploaderStatus: uploaderStatus,
             loopStatus: loopStatus,
