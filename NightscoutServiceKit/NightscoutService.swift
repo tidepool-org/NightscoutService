@@ -114,7 +114,7 @@ extension NightscoutService: RemoteDataService {
     public var dosingDecisionDataLimit: Int? { return 1000 }
 
     public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
-        uploader.uploadDeviceStatuses(stored.map { DeviceStatus(storedDosingDecision: $0) }, completion: completion)
+        uploader.uploadDeviceStatuses(stored.map { $0.deviceStatus }, completion: completion)
     }
 
     public var glucoseDataLimit: Int? { return 1000 }
@@ -132,7 +132,7 @@ extension NightscoutService: RemoteDataService {
     public var settingsDataLimit: Int? { return 1000 }
 
     public func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
-        uploader.uploadProfiles(stored.compactMap { ProfileSet(storedSettings: $0) }, completion: completion)
+        uploader.uploadProfiles(stored.compactMap { $0.profileSet }, completion: completion)
     }
 
 }

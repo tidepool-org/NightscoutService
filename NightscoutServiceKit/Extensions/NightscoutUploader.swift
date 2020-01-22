@@ -21,7 +21,7 @@ extension NightscoutUploader {
         var modified = [MealBolusNightscoutTreatment]()
 
         for entry in entries {
-            let treatment = MealBolusNightscoutTreatment(carbEntry: entry)
+            let treatment = entry.mealBolusNightscoutTreatment
             if entry.externalID != nil {
                 modified.append(treatment)
             } else {
@@ -72,7 +72,7 @@ extension NightscoutUploader {
             return
         }
 
-        uploadEntries(samples.compactMap { NightscoutEntry(storedGlucoseSample: $0) }) { result in
+        uploadEntries(samples.compactMap { $0.nightscoutEntry }) { result in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
