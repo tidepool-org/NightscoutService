@@ -53,7 +53,7 @@ extension StoredDosingDecision {
     
     var loopStatus: LoopStatus {
         return LoopStatus(name: Bundle.main.bundleDisplayName,
-                          version: Bundle.main.shortVersionString,
+                          version: Bundle.main.fullVersionString,
                           timestamp: date,
                           iob: iobStatus,
                           cob: cobStatus,
