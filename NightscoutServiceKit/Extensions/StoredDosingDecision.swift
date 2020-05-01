@@ -35,12 +35,19 @@ extension StoredDosingDecision {
     }
     
     var recommendTempBasal: RecommendedTempBasal? {
-        guard let tempBasalRecommendationDate = tempBasalRecommendationDate else {
+        guard let recommendedTempBasal = recommendedTempBasal else {
             return nil
         }
-        return RecommendedTempBasal(timestamp: tempBasalRecommendationDate.date,
-                                    rate: tempBasalRecommendationDate.recommendation.unitsPerHour,
-                                    duration: tempBasalRecommendationDate.recommendation.duration)
+        return RecommendedTempBasal(timestamp: recommendedTempBasal.date,
+                                    rate: recommendedTempBasal.recommendation.unitsPerHour,
+                                    duration: recommendedTempBasal.recommendation.duration)
+    }
+
+    var recommendBolus: Double? {
+        guard let recommendedBolus = recommendedBolus else {
+            return nil
+        }
+        return recommendedBolus.recommendation.amount
     }
     
     var loopEnacted: LoopEnacted? {
@@ -59,9 +66,9 @@ extension StoredDosingDecision {
                           cob: cobStatus,
                           predicted: predictedBG,
                           recommendedTempBasal: recommendTempBasal,
-                          recommendedBolus: recommendedBolus,
+                          recommendedBolus: recommendBolus,
                           enacted: loopEnacted,
-                          failureReason: error)
+                          failureReason: errors?.first)
     }
     
     var batteryStatus: BatteryStatus? {
