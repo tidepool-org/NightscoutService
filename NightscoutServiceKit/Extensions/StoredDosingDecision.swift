@@ -13,28 +13,28 @@ import NightscoutUploadKit
 
 extension StoredDosingDecision {
     
-    var iobStatus: IOBStatus? {
+    var loopStatusIOB: IOBStatus? {
         guard let insulinOnBoard = insulinOnBoard else {
             return nil
         }
         return IOBStatus(timestamp: insulinOnBoard.startDate, iob: insulinOnBoard.value)
     }
     
-    var cobStatus: COBStatus? {
+    var loopStatusCOB: COBStatus? {
         guard let carbsOnBoard = carbsOnBoard else {
             return nil
         }
         return COBStatus(cob: carbsOnBoard.quantity.doubleValue(for: HKUnit.gram()), timestamp: carbsOnBoard.startDate)
     }
     
-    var predictedBG: PredictedBG? {
+    var loopStatusPredicted: PredictedBG? {
         guard let predictedGlucose = predictedGlucose, let startDate = predictedGlucose.first?.startDate else {
             return nil
         }
         return PredictedBG(startDate: startDate, values: predictedGlucose.map { $0.quantity })
     }
     
-    var recommendTempBasal: RecommendedTempBasal? {
+    var loopStatusRecommendedTempBasal: RecommendedTempBasal? {
         guard let recommendedTempBasal = recommendedTempBasal else {
             return nil
         }
@@ -43,49 +43,56 @@ extension StoredDosingDecision {
                                     duration: recommendedTempBasal.recommendation.duration)
     }
 
-    var recommendBolus: Double? {
+    var loopStatusRecommendedBolus: Double? {
         guard let recommendedBolus = recommendedBolus else {
             return nil
         }
         return recommendedBolus.recommendation.amount
     }
     
-    var loopEnacted: LoopEnacted? {
+    var loopStatusEnacted: LoopEnacted? {
         guard case .some(.tempBasal(let tempBasal)) = pumpManagerStatus?.basalDeliveryState else {
             return nil
         }
         let duration = tempBasal.endDate.timeIntervalSince(tempBasal.startDate)
         return LoopEnacted(rate: tempBasal.unitsPerHour, duration: duration, timestamp: tempBasal.startDate, received: true)
     }
+
+    var loopStatusFailureReason: Error? {
+        guard let errors = errors else {
+            return nil
+        }
+        return errors.first
+    }
     
     var loopStatus: LoopStatus {
         return LoopStatus(name: Bundle.main.bundleDisplayName,
                           version: Bundle.main.fullVersionString,
                           timestamp: date,
-                          iob: iobStatus,
-                          cob: cobStatus,
-                          predicted: predictedBG,
-                          recommendedTempBasal: recommendTempBasal,
-                          recommendedBolus: recommendBolus,
-                          enacted: loopEnacted,
-                          failureReason: errors?.first)
+                          iob: loopStatusIOB,
+                          cob: loopStatusCOB,
+                          predicted: loopStatusPredicted,
+                          recommendedTempBasal: loopStatusRecommendedTempBasal,
+                          recommendedBolus: loopStatusRecommendedBolus,
+                          enacted: loopStatusEnacted,
+                          failureReason: loopStatusFailureReason)
     }
     
-    var batteryStatus: BatteryStatus? {
+    var pumpStatusBattery: BatteryStatus? {
         guard let pumpBatteryChargeRemaining = pumpManagerStatus?.pumpBatteryChargeRemaining else {
             return nil
         }
         return BatteryStatus(percent: Int(round(pumpBatteryChargeRemaining * 100)), voltage: nil, status: nil)
     }
     
-    var bolusing: Bool {
+    var pumpStatusBolusing: Bool {
         guard let pumpManagerStatus = pumpManagerStatus, case .inProgress = pumpManagerStatus.bolusState else {
             return false
         }
         return true
     }
     
-    var currentReservoirUnits: Double? {
+    var pumpStatusReservoir: Double? {
         guard let lastReservoirValue = lastReservoirValue, lastReservoirValue.startDate > Date().addingTimeInterval(.minutes(-15)) else {
             return nil
         }
@@ -102,10 +109,10 @@ extension StoredDosingDecision {
             manufacturer: pumpManagerStatus.device.manufacturer,
             model: pumpManagerStatus.device.model,
             iob: nil,
-            battery: batteryStatus,
+            battery: pumpStatusBattery,
             suspended: pumpManagerStatus.basalDeliveryState.isSuspended,
-            bolusing: bolusing,
-            reservoir: currentReservoirUnits,
+            bolusing: pumpStatusBolusing,
+            reservoir: pumpStatusReservoir,
             secondsFromGMT: pumpManagerStatus.timeZone.secondsFromGMT())
     }
     
