@@ -31,9 +31,9 @@ extension StoredSettings {
 
         return NightscoutUploadKit.LoopSettings(
             dosingEnabled: dosingEnabled,
-            overridePresets: overridePresets?.map { $0.nsScheduleOverride(for: bloodGlucoseUnit) } ?? [],
-            scheduleOverride: scheduleOverride?.nsScheduleOverride(for: bloodGlucoseUnit),
-            minimumBGGuard: suspendThreshold?.quantity.doubleValue(for: bloodGlucoseUnit),
+            overridePresets: overridePresets?.map { $0.nsScheduleOverride(for: HKUnit(from: bloodGlucoseUnit)) } ?? [],
+            scheduleOverride: scheduleOverride?.nsScheduleOverride(for: HKUnit(from: bloodGlucoseUnit)),
+            minimumBGGuard: suspendThreshold?.quantity.doubleValue(for: HKUnit(from: bloodGlucoseUnit)),
             preMealTargetRange: nightscoutPreMealTargetRange,
             maximumBasalRatePerHour: maximumBasalRatePerHour,
             maximumBolus: maximumBolus,
@@ -77,7 +77,7 @@ extension StoredSettings {
 
         return ProfileSet(
             startDate: date,
-            units: bloodGlucoseUnit.shortLocalizedUnitString(),
+            units: HKUnit(from: bloodGlucoseUnit).shortLocalizedUnitString(),
             enteredBy: "Loop",
             defaultProfile: "Default",
             store: ["Default": profile],
