@@ -16,7 +16,7 @@ extension NightscoutService: ServiceUI {
         return ServiceViewController(rootViewController: NightscoutServiceTableViewController(service: NightscoutService(), for: .create))
     }
 
-    public func settingsViewController() -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying) {
+    public func settingsViewController(chartColors: ChartColorPalette) -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying) {
       return ServiceViewController(rootViewController: NightscoutServiceTableViewController(service: self, for: .update))
     }
 
