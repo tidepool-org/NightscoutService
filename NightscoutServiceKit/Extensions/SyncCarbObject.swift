@@ -11,13 +11,17 @@ import LoopKit
 import NightscoutUploadKit
 import HealthKit
 
-extension StoredCarbEntry {
+extension SyncCarbObject {
 
-    var mealBolusNightscoutTreatment: MealBolusNightscoutTreatment {
+    var mealBolusNightscoutTreatment: MealBolusNightscoutTreatment? {
+        guard let nightscoutIdentifier = nightscoutIdentifier else {
+            return nil
+        }
+
         return MealBolusNightscoutTreatment(timestamp: startDate,
             enteredBy: "loop://\(UIDevice.current.name)",
             id: nightscoutIdentifier,
-            carbs: lround(quantity.doubleValue(for: HKUnit.gram())),
+            carbs: lround(grams),
             absorptionTime: absorptionTime,
             foodType: foodType)
     }

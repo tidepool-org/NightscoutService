@@ -11,49 +11,44 @@ import NightscoutUploadKit
 
 extension NightscoutUploader {
 
-    func uploadCarbEntries(_ entries: [StoredCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard !entries.isEmpty else {
+    func createCarbData(_ data: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard !data.isEmpty else {
             completion(.success(false))
             return
         }
 
-        var created = [MealBolusNightscoutTreatment]()
-        var modified = [MealBolusNightscoutTreatment]()
-
-        for entry in entries {
-            let treatment = entry.mealBolusNightscoutTreatment
-            if entry.externalID != nil {
-                modified.append(treatment)
-            } else {
-                created.append(treatment)
-            }
-        }
-
-        upload(created) { result in
+        upload(data.compactMap { $0.mealBolusNightscoutTreatment }) { result in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
             case .success:
-                self.modifyTreatments(modified) { error in
-                    if let error = error {
-                        completion(.failure(error))
-                    } else {
-                        completion(.success(true))
-                    }
-                }
+                completion(.success(true))
             }
         }
     }
 
-    func deleteCarbEntries(_ entries: [DeletedCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard !entries.isEmpty else {
+    func updateCarbData(_ data: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard !data.isEmpty else {
             completion(.success(false))
             return
         }
 
-        let ids = entries.compactMap { $0.nightscoutIdentifier }
+        modifyTreatments(data.compactMap { $0.mealBolusNightscoutTreatment }) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(true))
+            }
+        }
+    }
 
-        deleteTreatmentsByClientId(ids) { error in
+    func deleteCarbData(_ data: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard !data.isEmpty else {
+            completion(.success(false))
+            return
+        }
+
+        deleteTreatmentsByClientId(data.compactMap { $0.nightscoutIdentifier }) { error in
             if let error = error {
                 completion(.failure(error))
             } else {
@@ -105,15 +100,7 @@ extension NightscoutUploader {
 
 }
 
-extension StoredCarbEntry {
-
-    var nightscoutIdentifier: String {
-        return externalID ?? syncIdentifier ?? sampleUUID.uuidString
-    }
-
-}
-
-extension DeletedCarbEntry {
+extension SyncCarbObject {
 
     var nightscoutIdentifier: String? {
         return externalID ?? syncIdentifier ?? uuid?.uuidString

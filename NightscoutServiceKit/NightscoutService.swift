@@ -87,18 +87,25 @@ extension NightscoutService: RemoteDataService {
 
     public var carbDataLimit: Int? { return 1000 }
 
-    public func uploadCarbData(deleted: [DeletedCarbEntry], stored: [StoredCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
-        uploader.deleteCarbEntries(deleted) { result in
+    public func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
+        self.uploader.createCarbData(created) { result in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
-            case .success(let uploadedDeleted):
-                self.uploader.uploadCarbEntries(stored) { result in
+            case .success(let createdUploaded):
+                self.uploader.updateCarbData(updated) { result in
                     switch result {
                     case .failure(let error):
                         completion(.failure(error))
-                    case .success(let uploadedStored):
-                        completion(.success(uploadedDeleted || uploadedStored))
+                    case .success(let updatedUploaded):
+                        self.uploader.deleteCarbData(deleted) { result in
+                            switch result {
+                            case .failure(let error):
+                                completion(.failure(error))
+                            case .success(let deletedUploaded):
+                                completion(.success(createdUploaded || updatedUploaded || deletedUploaded))
+                            }
+                        }
                     }
                 }
             }
