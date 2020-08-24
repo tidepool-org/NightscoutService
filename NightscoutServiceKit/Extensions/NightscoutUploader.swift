@@ -103,7 +103,7 @@ extension NightscoutUploader {
 extension SyncCarbObject {
 
     var nightscoutIdentifier: String? {
-        return externalID ?? syncIdentifier ?? uuid?.uuidString
+        return syncIdentifier ?? uuid?.uuidString
     }
 
 }
