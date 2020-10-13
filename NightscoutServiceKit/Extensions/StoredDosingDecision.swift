@@ -110,7 +110,7 @@ extension StoredDosingDecision {
             model: pumpManagerStatus.device.model,
             iob: nil,
             battery: pumpStatusBattery,
-            suspended: pumpManagerStatus.basalDeliveryState.isSuspended,
+            suspended: pumpManagerStatus.basalDeliveryState?.isSuspended,
             bolusing: pumpStatusBolusing,
             reservoir: pumpStatusReservoir,
             secondsFromGMT: pumpManagerStatus.timeZone.secondsFromGMT())
