@@ -56,5 +56,4 @@ struct ServiceStatusView: View, HorizontalSizeClassOverride {
             Text("Done").bold()
         }
     }
-
 }

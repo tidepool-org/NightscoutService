@@ -44,22 +44,21 @@
 		A9B007C022BD7130000131DE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9B007BE22BD7130000131DE /* Localizable.strings */; };
 		A9C62DA42331CAD400535612 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C62DA32331CAD400535612 /* OSLog.swift */; };
 		A9C62DA52331CAE200535612 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C62DA32331CAD400535612 /* OSLog.swift */; };
+		A9C778BB25BD193900CC680D /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90E39A822BC7AD10016DFE8 /* Bundle.swift */; };
+		A9C778BC25BD193900CC680D /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90E39A822BC7AD10016DFE8 /* Bundle.swift */; };
 		A9E4153622BC89A300168E14 /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4153522BC89A300168E14 /* NibLoadable.swift */; };
 		A9E4153822BC89B600168E14 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4153722BC89B600168E14 /* IdentifiableClass.swift */; };
 		A9E4153B22BC8A3800168E14 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4153A22BC8A3800168E14 /* UIColor.swift */; };
 		C102014D2526C1BA003B6FB7 /* ServiceStatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C102014C2526C1BA003B6FB7 /* ServiceStatusViewModel.swift */; };
 		C10201552526D3E8003B6FB7 /* NightscoutService+ServiceStatusViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10201542526D3E8003B6FB7 /* NightscoutService+ServiceStatusViewModelDelegate.swift */; };
-		C18608B0252AAFA4008215DB /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18608AF252AAFA4008215DB /* WelcomeView.swift */; };
 		C1E703642506BE9400DAB534 /* ObjectIdCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E703632506BE9400DAB534 /* ObjectIdCache.swift */; };
 		C1E7036625070A0E00DAB534 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1E7036525070A0E00DAB534 /* Assets.xcassets */; };
 		C1E7036C25070D3200DAB534 /* ServiceUICoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E7036B25070D3200DAB534 /* ServiceUICoordinator.swift */; };
-		C1E7038A25070DFA00DAB534 /* SettingsReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E7038925070DFA00DAB534 /* SettingsReviewViewModel.swift */; };
 		C1E7038C2507117900DAB534 /* CredentialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E7038B2507117900DAB534 /* CredentialsView.swift */; };
 		C1E7038E2507131400DAB534 /* CredentialsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E7038D2507131400DAB534 /* CredentialsViewModel.swift */; };
 		C1E703932507193400DAB534 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E703922507193400DAB534 /* Image.swift */; };
 		C1E70395250725AA00DAB534 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E70394250725AA00DAB534 /* KeyboardObserver.swift */; };
 		C1EBB08A252596EA000D9680 /* ServiceStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EBB089252596EA000D9680 /* ServiceStatusView.swift */; };
-		C1EFF674250B93510096A558 /* OnboardingChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EFF673250B93510096A558 /* OnboardingChooserView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,7 +126,7 @@
 		A993990222BC7095005E39D3 /* NightscoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutService.swift; sourceTree = "<group>"; };
 		A993990422BC70B7005E39D3 /* NightscoutService+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NightscoutService+UI.swift"; sourceTree = "<group>"; };
 		A993990822BC72B4005E39D3 /* NightscoutUploadKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NightscoutUploadKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A99C713123396CB100AB9035 /* NightscoutServiceKitPlugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = NightscoutServiceKitPlugin.framework; path = NightscoutServiceKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		A99C713123396CB100AB9035 /* NightscoutServiceKitPlugin.loopplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NightscoutServiceKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		A99C713323396CB100AB9035 /* NightscoutServiceKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutServiceKitPlugin.h; sourceTree = "<group>"; };
 		A99C713423396CB100AB9035 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A99C714123396D8E00AB9035 /* NightscoutServiceKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutServiceKitPlugin.swift; sourceTree = "<group>"; };
@@ -158,17 +157,14 @@
 		A9E4153A22BC8A3800168E14 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		C102014C2526C1BA003B6FB7 /* ServiceStatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceStatusViewModel.swift; sourceTree = "<group>"; };
 		C10201542526D3E8003B6FB7 /* NightscoutService+ServiceStatusViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NightscoutService+ServiceStatusViewModelDelegate.swift"; sourceTree = "<group>"; };
-		C18608AF252AAFA4008215DB /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		C1E703632506BE9400DAB534 /* ObjectIdCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectIdCache.swift; sourceTree = "<group>"; };
 		C1E7036525070A0E00DAB534 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1E7036B25070D3200DAB534 /* ServiceUICoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceUICoordinator.swift; sourceTree = "<group>"; };
-		C1E7038925070DFA00DAB534 /* SettingsReviewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsReviewViewModel.swift; sourceTree = "<group>"; };
 		C1E7038B2507117900DAB534 /* CredentialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsView.swift; sourceTree = "<group>"; };
 		C1E7038D2507131400DAB534 /* CredentialsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsViewModel.swift; sourceTree = "<group>"; };
 		C1E703922507193400DAB534 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		C1E70394250725AA00DAB534 /* KeyboardObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		C1EBB089252596EA000D9680 /* ServiceStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceStatusView.swift; sourceTree = "<group>"; };
-		C1EFF673250B93510096A558 /* OnboardingChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingChooserView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,7 +222,6 @@
 		A90E399F22BC77220016DFE8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A90E39A822BC7AD10016DFE8 /* Bundle.swift */,
 				A915719D23329845005429E1 /* DiagnosticLog+Subsystem.swift */,
 				A90E39A422BC791E0016DFE8 /* DoseEntry.swift */,
 				A90E39A622BC7A360016DFE8 /* HKUnit.swift */,
@@ -263,7 +258,7 @@
 				A91BAC2422BC691A00ABF1BB /* NightscoutServiceKitTests.xctest */,
 				A91BAC3A22BC69B500ABF1BB /* NightscoutServiceKitUI.framework */,
 				A91BAC4222BC69B500ABF1BB /* NightscoutServiceKitUITests.xctest */,
-				A99C713123396CB100AB9035 /* NightscoutServiceKitPlugin.framework */,
+				A99C713123396CB100AB9035 /* NightscoutServiceKitPlugin.loopplugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -274,9 +269,9 @@
 				A91BAC1E22BC691A00ABF1BB /* NightscoutServiceKit.h */,
 				A91BAC1F22BC691A00ABF1BB /* Info.plist */,
 				A993990222BC7095005E39D3 /* NightscoutService.swift */,
+				C1E703632506BE9400DAB534 /* ObjectIdCache.swift */,
 				A90E399F22BC77220016DFE8 /* Extensions */,
 				A9B007BB22BD7120000131DE /* Localizable.strings */,
-				C1E703632506BE9400DAB534 /* ObjectIdCache.swift */,
 			);
 			path = NightscoutServiceKit;
 			sourceTree = "<group>";
@@ -292,15 +287,15 @@
 		A91BAC3B22BC69B500ABF1BB /* NightscoutServiceKitUI */ = {
 			isa = PBXGroup;
 			children = (
-				A9E4153922BC8A2C00168E14 /* Extensions */,
-				C1E703912507179C00DAB534 /* Models */,
-				C1E703902507178E00DAB534 /* ViewControllers */,
-				C1E7038F2507178300DAB534 /* Views */,
 				A91BAC3C22BC69B500ABF1BB /* NightscoutServiceKitUI.h */,
 				A91BAC3D22BC69B500ABF1BB /* Info.plist */,
 				A993990422BC70B7005E39D3 /* NightscoutService+UI.swift */,
-				A9B007BE22BD7130000131DE /* Localizable.strings */,
 				C1E7036525070A0E00DAB534 /* Assets.xcassets */,
+				A9E4153922BC8A2C00168E14 /* Extensions */,
+				A9B007BE22BD7130000131DE /* Localizable.strings */,
+				C1E703912507179C00DAB534 /* Models */,
+				C1E703902507178E00DAB534 /* ViewControllers */,
+				C1E7038F2507178300DAB534 /* Views */,
 			);
 			path = NightscoutServiceKitUI;
 			sourceTree = "<group>";
@@ -344,6 +339,7 @@
 		A9C62DA22331CAC200535612 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				A90E39A822BC7AD10016DFE8 /* Bundle.swift */,
 				A9C62DA32331CAD400535612 /* OSLog.swift */,
 			);
 			path = Extensions;
@@ -353,10 +349,10 @@
 			isa = PBXGroup;
 			children = (
 				A9E4153722BC89B600168E14 /* IdentifiableClass.swift */,
-				A9E4153522BC89A300168E14 /* NibLoadable.swift */,
 				C1E703922507193400DAB534 /* Image.swift */,
-				A9E4153A22BC8A3800168E14 /* UIColor.swift */,
+				A9E4153522BC89A300168E14 /* NibLoadable.swift */,
 				C10201542526D3E8003B6FB7 /* NightscoutService+ServiceStatusViewModelDelegate.swift */,
+				A9E4153A22BC8A3800168E14 /* UIColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -365,9 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				C1E7038B2507117900DAB534 /* CredentialsView.swift */,
-				C1EFF673250B93510096A558 /* OnboardingChooserView.swift */,
 				C1EBB089252596EA000D9680 /* ServiceStatusView.swift */,
-				C18608AF252AAFA4008215DB /* WelcomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -383,9 +377,8 @@
 		C1E703912507179C00DAB534 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C1E70394250725AA00DAB534 /* KeyboardObserver.swift */,
-				C1E7038925070DFA00DAB534 /* SettingsReviewViewModel.swift */,
 				C1E7038D2507131400DAB534 /* CredentialsViewModel.swift */,
+				C1E70394250725AA00DAB534 /* KeyboardObserver.swift */,
 				C102014C2526C1BA003B6FB7 /* ServiceStatusViewModel.swift */,
 			);
 			path = Models;
@@ -514,7 +507,7 @@
 			);
 			name = NightscoutServiceKitPlugin;
 			productName = NightscoutServiceKitPlugin;
-			productReference = A99C713123396CB100AB9035 /* NightscoutServiceKitPlugin.framework */;
+			productReference = A99C713123396CB100AB9035 /* NightscoutServiceKitPlugin.loopplugin */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -721,13 +714,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9C778BC25BD193900CC680D /* Bundle.swift in Sources */,
 				A9E4153822BC89B600168E14 /* IdentifiableClass.swift in Sources */,
 				C102014D2526C1BA003B6FB7 /* ServiceStatusViewModel.swift in Sources */,
-				C1EFF674250B93510096A558 /* OnboardingChooserView.swift in Sources */,
 				C1EBB08A252596EA000D9680 /* ServiceStatusView.swift in Sources */,
 				A9E4153622BC89A300168E14 /* NibLoadable.swift in Sources */,
 				C1E7036C25070D3200DAB534 /* ServiceUICoordinator.swift in Sources */,
-				C1E7038A25070DFA00DAB534 /* SettingsReviewViewModel.swift in Sources */,
 				A9B007B422BD6FF7000131DE /* LocalizedString.swift in Sources */,
 				C10201552526D3E8003B6FB7 /* NightscoutService+ServiceStatusViewModelDelegate.swift in Sources */,
 				C1E703932507193400DAB534 /* Image.swift in Sources */,
@@ -737,7 +729,6 @@
 				A9C62DA52331CAE200535612 /* OSLog.swift in Sources */,
 				A9E4153B22BC8A3800168E14 /* UIColor.swift in Sources */,
 				C1E7038C2507117900DAB534 /* CredentialsView.swift in Sources */,
-				C18608B0252AAFA4008215DB /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -753,6 +744,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A99C714223396D8E00AB9035 /* NightscoutServiceKitPlugin.swift in Sources */,
+				A9C778BB25BD193900CC680D /* Bundle.swift in Sources */,
 				A99C714023396D6200AB9035 /* OSLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1067,6 +1059,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1093,6 +1086,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1153,6 +1147,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1179,6 +1174,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1238,6 +1234,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = loopplugin;
 			};
@@ -1264,6 +1261,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = loopplugin;
 			};

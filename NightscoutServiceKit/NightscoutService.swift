@@ -25,6 +25,8 @@ public final class NightscoutService: Service {
 
     public var apiSecret: String?
     
+    public var isOnboarded: Bool
+
     /// Maps loop syncIdentifiers to Nightscout objectIds
     var objectIdCache: ObjectIdCache {
         get {
@@ -46,10 +48,13 @@ public final class NightscoutService: Service {
     private let log = OSLog(category: "NightscoutService")
 
     public init() {
-        lockedObjectIdCache = Locked(ObjectIdCache())
+        self.isOnboarded = false
+        self.lockedObjectIdCache = Locked(ObjectIdCache())
     }
 
     public required init?(rawState: RawStateValue) {
+        self.isOnboarded = rawState["isOnboarded"] as? Bool ?? true   // Backwards compatibility
+
         if let objectIdCacheRaw = rawState["objectIdCache"] as? ObjectIdCache.RawValue,
             let objectIdCache = ObjectIdCache(rawValue: objectIdCacheRaw)
         {
@@ -62,7 +67,14 @@ public final class NightscoutService: Service {
     }
 
     public var rawState: RawStateValue {
-        return ["objectIdCache": objectIdCache.rawValue]
+        return [
+            "isOnboarded": isOnboarded,
+            "objectIdCache": objectIdCache.rawValue
+        ]
+    }
+
+    public func delete() {
+        completeDelete()
     }
 
     public var hasConfiguration: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
@@ -80,6 +92,11 @@ public final class NightscoutService: Service {
         saveCredentials()
     }
 
+    public func completeOnboard() {
+        isOnboarded = true
+        serviceDelegate?.serviceDidUpdateState(self)
+    }
+
     public func completeUpdate() {
         saveCredentials()
         serviceDelegate?.serviceDidUpdateState(self)
@@ -87,6 +104,7 @@ public final class NightscoutService: Service {
 
     public func completeDelete() {
         clearCredentials()
+        serviceDelegate?.serviceWasDeleted(self)
     }
 
     private func saveCredentials() {
@@ -106,10 +124,6 @@ public final class NightscoutService: Service {
         try? KeychainManager().setNightscoutCredentials()
     }
     
-    public func saveSettings(settings: TherapySettings) {
-        serviceDelegate?.serviceHasNewTherapySettings(settings)
-    }
-
 }
 
 extension NightscoutService: RemoteDataService {

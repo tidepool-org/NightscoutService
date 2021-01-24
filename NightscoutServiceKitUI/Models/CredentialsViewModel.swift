@@ -14,7 +14,6 @@ public enum CredentialsError: Error {
 }
 
 class CredentialsViewModel: ObservableObject {
-    
     @Published var isVerifying: Bool
     @Published var error: Error?
 

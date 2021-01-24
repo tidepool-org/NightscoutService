@@ -12,7 +12,6 @@ import NightscoutServiceKit
 import NightscoutServiceKitUI
 
 class NightscoutServiceKitPlugin: NSObject, ServiceUIPlugin {
-
     private let log = OSLog(category: "NightscoutServiceKitPlugin")
 
     public var serviceType: ServiceUI.Type? {
@@ -21,7 +20,6 @@ class NightscoutServiceKitPlugin: NSObject, ServiceUIPlugin {
 
     override init() {
         super.init()
-        log.default("NightscoutServiceKitPlugin Instantiated")
+        log.default("Instantiated")
     }
-
 }

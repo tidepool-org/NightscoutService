@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 class KeyboardObserver: ObservableObject {
-    
     @Published var height: CGFloat = 0
     
     var _center: NotificationCenter
