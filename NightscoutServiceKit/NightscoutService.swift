@@ -181,7 +181,7 @@ extension NightscoutService: RemoteDataService {
         }
     }
 
-    public var dosingDecisionDataLimit: Int? { return 1000 }
+    public var dosingDecisionDataLimit: Int? { return 50 }  // Each can be up to 20K bytes of serialized JSON, target ~1M or less
 
     public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
         guard let uploader = uploader else {
@@ -209,7 +209,7 @@ extension NightscoutService: RemoteDataService {
         completion(.success(false))
     }
 
-    public var settingsDataLimit: Int? { return 1000 }
+    public var settingsDataLimit: Int? { return 400 }  // Each can be up to 2.5K bytes of serialized JSON, target ~1M or less
 
     public func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
         guard let uploader = uploader else {
