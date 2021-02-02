@@ -104,7 +104,7 @@ public final class NightscoutService: Service {
 
     public func completeDelete() {
         clearCredentials()
-        serviceDelegate?.serviceWasDeleted(self)
+        serviceDelegate?.serviceWantsDeletion(self)
     }
 
     private func saveCredentials() {

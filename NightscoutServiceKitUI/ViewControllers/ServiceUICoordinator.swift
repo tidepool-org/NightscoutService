@@ -76,7 +76,7 @@ class ServiceUICoordinator: UINavigationController, ServiceCreateNotifying, Serv
         case .login:
             if service == nil {
                 self.service = NightscoutService()
-                serviceCreateDelegate?.serviceCreateNotifying(self, didCreateService: service!)
+                serviceCreateDelegate?.serviceCreateNotifying(didCreateService: service!)
             }
 
             let model = CredentialsViewModel(service: service!)
@@ -115,7 +115,7 @@ class ServiceUICoordinator: UINavigationController, ServiceCreateNotifying, Serv
     private func completeLogin() {
         if let service = service {
             service.completeOnboard()
-            serviceOnboardDelegate?.serviceOnboardNotifying(self, didOnboardService: service)
+            serviceOnboardDelegate?.serviceOnboardNotifying(didOnboardService: service)
         }
         stepFinished()
     }
