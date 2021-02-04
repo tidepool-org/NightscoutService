@@ -131,7 +131,7 @@ extension ServiceUICoordinator: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         // Pop the current screen from the stack if we're navigating back
         while viewControllers.count < screenStack.count {
-            _ = screenStack.popLast()
+            screenStack.removeLast()
         }
     }
 }
