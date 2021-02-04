@@ -73,10 +73,6 @@ public final class NightscoutService: Service {
         ]
     }
 
-    public func delete() {
-        completeDelete()
-    }
-
     public var hasConfiguration: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
 
     public func verifyConfiguration(completion: @escaping (Error?) -> Void) {

@@ -121,8 +121,8 @@ class ServiceUICoordinator: UINavigationController, ServiceCreateNotifying, Serv
     }
 
     private func completeLogout() {
-        service?.delete()
-        service = nil
+        self.service?.completeDelete()
+        self.service = nil
         stepFinished()
     }
 }
