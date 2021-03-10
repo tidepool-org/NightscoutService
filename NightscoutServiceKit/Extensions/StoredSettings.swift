@@ -19,9 +19,10 @@ extension StoredSettings {
 
         var nightscoutPreMealTargetRange: ClosedRange<Double>?
         if let preMealTargetRange = preMealTargetRange {
-            nightscoutPreMealTargetRange = ClosedRange(uncheckedBounds: (
-                lower: preMealTargetRange.minValue,
-                upper: preMealTargetRange.maxValue))
+            nightscoutPreMealTargetRange = ClosedRange(
+                uncheckedBounds: (
+                    lower: preMealTargetRange.doubleRange(for: bloodGlucoseUnit).minValue,
+                    upper: preMealTargetRange.doubleRange(for: bloodGlucoseUnit).maxValue))
         }
 
         var deviceTokenData: Data?
