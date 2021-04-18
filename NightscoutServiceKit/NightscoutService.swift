@@ -58,7 +58,7 @@ public final class NightscoutService: Service {
         if let objectIdCacheRaw = rawState["objectIdCache"] as? ObjectIdCache.RawValue,
             let objectIdCache = ObjectIdCache(rawValue: objectIdCacheRaw)
         {
-            self.lockedObjectIdCache =  Locked(objectIdCache)
+            self.lockedObjectIdCache = Locked(objectIdCache)
         } else {
             self.lockedObjectIdCache = Locked(ObjectIdCache())
         }
@@ -90,6 +90,8 @@ public final class NightscoutService: Service {
 
     public func completeOnboard() {
         isOnboarded = true
+
+        saveCredentials()
         serviceDelegate?.serviceDidUpdateState(self)
     }
 

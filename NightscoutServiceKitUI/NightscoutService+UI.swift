@@ -16,11 +16,11 @@ extension NightscoutService: ServiceUI {
         UIImage(named: "nightscout", in: Bundle(for: ServiceUICoordinator.self), compatibleWith: nil)!
     }
 
-    public static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying, ServiceUI> {
+    public static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<ServiceViewController, ServiceUI> {
         return .userInteractionRequired(ServiceUICoordinator(colorPalette: colorPalette))
     }
 
-    public func settingsViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & ServiceOnboardNotifying & CompletionNotifying) {
+    public func settingsViewController(colorPalette: LoopUIColorPalette) -> ServiceViewController {
         return ServiceUICoordinator(service: self, colorPalette: colorPalette)
     }
 }

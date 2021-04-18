@@ -27,9 +27,8 @@ enum ServiceScreen {
     }
 }
 
-class ServiceUICoordinator: UINavigationController, ServiceCreateNotifying, ServiceOnboardNotifying, CompletionNotifying {
-    public weak var serviceCreateDelegate: ServiceCreateDelegate?
-    public weak var serviceOnboardDelegate: ServiceOnboardDelegate?
+class ServiceUICoordinator: UINavigationController, ServiceOnboarding, CompletionNotifying {
+    public weak var serviceOnboardingDelegate: ServiceOnboardingDelegate?
     public weak var completionDelegate: CompletionDelegate?
 
     private let colorPalette: LoopUIColorPalette
@@ -75,8 +74,10 @@ class ServiceUICoordinator: UINavigationController, ServiceCreateNotifying, Serv
         switch screen {
         case .login:
             if service == nil {
-                self.service = NightscoutService()
-                serviceCreateDelegate?.serviceCreateNotifying(didCreateService: service!)
+                let service = NightscoutService()
+                service.completeCreate()
+                serviceOnboardingDelegate?.serviceOnboarding(didCreateService: service)
+                self.service = service
             }
 
             let model = CredentialsViewModel(service: service!)
@@ -115,7 +116,7 @@ class ServiceUICoordinator: UINavigationController, ServiceCreateNotifying, Serv
     private func completeLogin() {
         if let service = service {
             service.completeOnboard()
-            serviceOnboardDelegate?.serviceOnboardNotifying(didOnboardService: service)
+            serviceOnboardingDelegate?.serviceOnboarding(didOnboardService: service)
         }
         stepFinished()
     }

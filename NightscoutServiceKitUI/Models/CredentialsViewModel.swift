@@ -39,7 +39,6 @@ class CredentialsViewModel: ObservableObject {
                     self.error = error
                     
                     if error == nil {
-                        self.service.completeCreate()
                         self.didSucceed?()
                     }
                 }
