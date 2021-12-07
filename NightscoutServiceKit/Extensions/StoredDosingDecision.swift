@@ -41,23 +41,23 @@ extension StoredDosingDecision {
         
         let nightscoutTempBasalAdjustment: TempBasalAdjustment?
         
-        if let basalAdjustment = automaticDoseRecommendation.recommendation.basalAdjustment {
+        if let basalAdjustment = automaticDoseRecommendation.basalAdjustment {
             nightscoutTempBasalAdjustment = TempBasalAdjustment(rate: basalAdjustment.unitsPerHour, duration: basalAdjustment.duration)
         } else {
             nightscoutTempBasalAdjustment = nil
         }
         
         return NightscoutUploadKit.AutomaticDoseRecommendation(
-            timestamp: automaticDoseRecommendation.date,
+            timestamp: date,
             tempBasalAdjustment: nightscoutTempBasalAdjustment,
-            bolusVolume: automaticDoseRecommendation.recommendation.bolusUnits)
+            bolusVolume: automaticDoseRecommendation.bolusUnits ?? 0)
     }
 
     var loopStatusRecommendedBolus: Double? {
-        guard let recommendedBolus = recommendedBolus else {
+        guard let manualBolusRecommendation = manualBolusRecommendation else {
             return nil
         }
-        return recommendedBolus.recommendation.amount
+        return manualBolusRecommendation.recommendation.amount
     }
     
     var loopStatusEnacted: LoopEnacted? {
@@ -68,11 +68,8 @@ extension StoredDosingDecision {
         return LoopEnacted(rate: tempBasal.unitsPerHour, duration: duration, timestamp: tempBasal.startDate, received: true)
     }
 
-    var loopStatusFailureReason: Error? {
-        guard let errors = errors else {
-            return nil
-        }
-        return errors.first
+    var loopStatusFailureReason: String? {
+        return errors.first?.description
     }
     
     var loopStatus: LoopStatus {
@@ -128,7 +125,7 @@ extension StoredDosingDecision {
     
     var overrideStatus: NightscoutUploadKit.OverrideStatus {
         guard let scheduleOverride = scheduleOverride, scheduleOverride.isActive(),
-            let glucoseTargetRange = effectiveGlucoseTargetRangeSchedule?.value(at: date) else
+            let glucoseTargetRange = glucoseTargetRangeSchedule?.value(at: date) else
         {
             return NightscoutUploadKit.OverrideStatus(timestamp: date, active: false)
         }
@@ -162,4 +159,14 @@ extension StoredDosingDecision {
             overrideStatus: overrideStatus)
     }
     
+}
+
+extension StoredDosingDecision.Issue {
+    var description: String {
+        var description = id
+        if let details = details {
+            description += String(describing: details)
+        }
+        return description
+    }
 }
