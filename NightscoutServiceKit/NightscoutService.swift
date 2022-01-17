@@ -169,30 +169,6 @@ extension NightscoutService: RemoteDataService {
         }
     }
 
-    public var doseDataLimit: Int? { return 1000 }
-
-    public func uploadDoseData(_ stored: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let uploader = uploader else {
-            completion(.success(true))
-            return
-        }
-
-        uploader.uploadDoses(stored, usingObjectIdCache: self.objectIdCache) { (result) in
-            switch (result) {
-            case .success(let objectIds):
-                let syncIdentifiers = stored.map { $0.syncIdentifier }
-                for (syncIdentifier, objectId) in zip(syncIdentifiers, objectIds) {
-                    if let syncIdentifier = syncIdentifier {
-                        self.objectIdCache.add(syncIdentifier: syncIdentifier, objectId: objectId)
-                    }
-                }
-                completion(.success(!stored.isEmpty))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
     public var dosingDecisionDataLimit: Int? { return 50 }  // Each can be up to 20K bytes of serialized JSON, target ~1M or less
 
     public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
@@ -215,10 +191,29 @@ extension NightscoutService: RemoteDataService {
         uploader.uploadGlucoseSamples(stored, completion: completion)
     }
 
-    public var pumpEventDataLimit: Int? { return 1000 }
+    public var pumpDataLimit: Int? { return 1000 }
 
-    public func uploadPumpEventData(_ stored: [PersistedPumpEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
-        completion(.success(false))
+    public func uploadPumpData(_ stored: [SyncPumpEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard let uploader = uploader else {
+            completion(.success(true))
+            return
+        }
+
+        let doses = stored.compactMap { $0.dose }
+        uploader.uploadDoses(doses, usingObjectIdCache: self.objectIdCache) { (result) in
+            switch (result) {
+            case .success(let objectIds):
+                let syncIdentifiers = doses.map { $0.syncIdentifier }
+                for (syncIdentifier, objectId) in zip(syncIdentifiers, objectIds) {
+                    if let syncIdentifier = syncIdentifier {
+                        self.objectIdCache.add(syncIdentifier: syncIdentifier, objectId: objectId)
+                    }
+                }
+                completion(.success(!doses.isEmpty))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 
     public var settingsDataLimit: Int? { return 400 }  // Each can be up to 2.5K bytes of serialized JSON, target ~1M or less
