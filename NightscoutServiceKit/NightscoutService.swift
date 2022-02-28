@@ -129,7 +129,7 @@ extension NightscoutService: RemoteDataService {
     public var carbDataLimit: Int? { return 1000 }
 
     public func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let uploader = uploader else {
+        guard hasConfiguration, let uploader = uploader else {
             completion(.success(true))
             return
         }
@@ -171,24 +171,36 @@ extension NightscoutService: RemoteDataService {
 
     public var doseDataLimit: Int? { return 1000 }
 
-    public func uploadDoseData(_ stored: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let uploader = uploader else {
+    public func uploadDoseData(created: [DoseEntry], deleted: [DoseEntry], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+        guard hasConfiguration, let uploader = uploader else {
             completion(.success(true))
             return
         }
 
-        uploader.uploadDoses(stored, usingObjectIdCache: self.objectIdCache) { (result) in
+        uploader.createDoses(created.filter { !$0.isMutable } , usingObjectIdCache: self.objectIdCache) { (result) in
             switch (result) {
-            case .success(let objectIds):
-                let syncIdentifiers = stored.map { $0.syncIdentifier }
-                for (syncIdentifier, objectId) in zip(syncIdentifiers, objectIds) {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let createdObjectIds):
+                let createdUploaded = !created.isEmpty
+                let syncIdentifiers = created.map { $0.syncIdentifier }
+                for (syncIdentifier, objectId) in zip(syncIdentifiers, createdObjectIds) {
                     if let syncIdentifier = syncIdentifier {
                         self.objectIdCache.add(syncIdentifier: syncIdentifier, objectId: objectId)
                     }
                 }
-                completion(.success(!stored.isEmpty))
-            case .failure(let error):
-                completion(.failure(error))
+                self.serviceDelegate?.serviceDidUpdateState(self)
+
+                uploader.deleteDoses(deleted.filter { !$0.isMutable }, usingObjectIdCache: self.objectIdCache) { result in
+                    switch result {
+                    case .failure(let error):
+                        completion(.failure(error))
+                    case .success(let deletedUploaded):
+                        self.objectIdCache.purge(before: Date().addingTimeInterval(-self.objectIdCacheKeepTime))
+                        self.serviceDelegate?.serviceDidUpdateState(self)
+                        completion(.success(createdUploaded || deletedUploaded))
+                    }
+                }
             }
         }
     }
@@ -196,7 +208,7 @@ extension NightscoutService: RemoteDataService {
     public var dosingDecisionDataLimit: Int? { return 50 }  // Each can be up to 20K bytes of serialized JSON, target ~1M or less
 
     public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let uploader = uploader else {
+        guard hasConfiguration, let uploader = uploader else {
             completion(.success(true))
             return
         }
@@ -207,7 +219,7 @@ extension NightscoutService: RemoteDataService {
     public var glucoseDataLimit: Int? { return 1000 }
 
     public func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let uploader = uploader else {
+        guard hasConfiguration, let uploader = uploader else {
             completion(.success(true))
             return
         }
@@ -224,7 +236,7 @@ extension NightscoutService: RemoteDataService {
     public var settingsDataLimit: Int? { return 400 }  // Each can be up to 2.5K bytes of serialized JSON, target ~1M or less
 
     public func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let uploader = uploader else {
+        guard hasConfiguration, let uploader = uploader else {
             completion(.success(true))
             return
         }
