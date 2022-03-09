@@ -126,6 +126,12 @@ public final class NightscoutService: Service {
 
 extension NightscoutService: RemoteDataService {
 
+    public var alertDataLimit: Int? { return 1000 }
+
+    public func uploadAlertData(_ stored: [SyncAlertObject], completion: @escaping (Result<Bool, Error>) -> Void) {
+        completion(.success(false))
+    }
+
     public var carbDataLimit: Int? { return 1000 }
 
     public func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
