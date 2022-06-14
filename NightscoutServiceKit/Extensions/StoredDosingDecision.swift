@@ -61,11 +61,10 @@ extension StoredDosingDecision {
     }
     
     var loopStatusEnacted: LoopEnacted? {
-        guard case .some(.tempBasal(let tempBasal)) = pumpManagerStatus?.basalDeliveryState else {
+        guard let automaticDoseRecommendation = automaticDoseRecommendation, errors.isEmpty, let tempBasal = automaticDoseRecommendation.basalAdjustment else {
             return nil
         }
-        let duration = tempBasal.endDate.timeIntervalSince(tempBasal.startDate)
-        return LoopEnacted(rate: tempBasal.unitsPerHour, duration: duration, timestamp: tempBasal.startDate, received: true)
+        return LoopEnacted(rate: tempBasal.unitsPerHour, duration: tempBasal.duration, timestamp: date, received: true, bolusVolume: automaticDoseRecommendation.bolusUnits ?? 0)
     }
 
     var loopStatusFailureReason: String? {
@@ -110,6 +109,7 @@ extension StoredDosingDecision {
         guard let pumpManagerStatus = pumpManagerStatus else {
             return nil
         }
+
         return PumpStatus(
             clock: date,
             pumpID: pumpManagerStatus.device.localIdentifier ?? "Unknown",
@@ -120,7 +120,10 @@ extension StoredDosingDecision {
             suspended: pumpManagerStatus.basalDeliveryState?.isSuspended,
             bolusing: pumpStatusBolusing,
             reservoir: pumpStatusReservoir,
-            secondsFromGMT: pumpManagerStatus.timeZone.secondsFromGMT())
+            secondsFromGMT: pumpManagerStatus.timeZone.secondsFromGMT(),
+            reservoirDisplayOverride: pumpStatusHighlight?.localizedMessage,
+            reservoirLevelOverride: pumpStatusHighlight?.reservoirLevelOverride
+        )
     }
     
     var overrideStatus: NightscoutUploadKit.OverrideStatus {
@@ -170,3 +173,17 @@ extension StoredDosingDecision.Issue {
         return description
     }
 }
+
+extension StoredDosingDecision.StoredDeviceHighlight {
+    var reservoirLevelOverride: NightscoutSeverityLevel {
+        switch state {
+        case .normalPump, .normalCGM:
+            return .none
+        case .warning:
+            return .warn
+        case .critical:
+            return .urgent
+        }
+    }
+}
+

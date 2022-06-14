@@ -82,7 +82,7 @@ extension NightscoutUploader {
             return
         }
 
-        uploadEntries(samples.compactMap { $0.nightscoutEntry }) { result in
+        uploadEntries(samples.compactMap { $0.glucoseEntry }) { result in
             switch result {
             case .failure(let error):
                 completion(.failure(error))

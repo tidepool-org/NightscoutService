@@ -63,9 +63,9 @@ extension StoredSettings {
         return ProfileSet.Profile(
             timezone: basalRateSchedule.timeZone,
             dia: defaultRapidActingModel.actionDuration,
-            sensitivity: insulinSensitivitySchedule.items.scheduleItems(),
-            carbratio: carbRatioSchedule.items.scheduleItems(),
-            basal: basalRateSchedule.items.scheduleItems(),
+            sensitivity: insulinSensitivitySchedule.items.scheduleItems,
+            carbratio: carbRatioSchedule.items.scheduleItems,
+            basal: basalRateSchedule.items.scheduleItems,
             targetLow: targetLowItems,
             targetHigh: targetHighItems,
             units: glucoseTargetRangeSchedule.unit.shortLocalizedUnitString())
@@ -89,7 +89,7 @@ extension StoredSettings {
 
 fileprivate extension Array where Element == RepeatingScheduleValue<Double> {
 
-    func scheduleItems() -> [ProfileSet.ScheduleItem] {
+    var scheduleItems: [ProfileSet.ScheduleItem] {
         return map { item -> ProfileSet.ScheduleItem in
             return ProfileSet.ScheduleItem(offset: item.startTime, value: item.value)
         }

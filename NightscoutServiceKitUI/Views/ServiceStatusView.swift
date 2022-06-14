@@ -14,7 +14,8 @@ struct ServiceStatusView: View, HorizontalSizeClassOverride {
     @Environment(\.dismissAction) private var dismiss
 
     @ObservedObject var viewModel: ServiceStatusViewModel
-    
+    @ObservedObject var otpViewModel: OTPViewModel
+    @State private var selectedItem: String?
     var body: some View {
         VStack {
             Text("Nightscout")
@@ -25,6 +26,7 @@ struct ServiceStatusView: View, HorizontalSizeClassOverride {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 150, height: 150)
             
+
             VStack(spacing: 0) {
                 HStack {
                     Text("URL")
@@ -38,6 +40,17 @@ struct ServiceStatusView: View, HorizontalSizeClassOverride {
                     Spacer()
                     Text(String(describing: viewModel.status))
                 }
+                .padding()
+                Divider()
+                NavigationLink(destination: OTPSelectionView(otpViewModel: otpViewModel), tag: "otp-view", selection: $selectedItem) {
+                    HStack {
+                        Text("One-Time Password")
+                        Spacer()
+                        Text(otpViewModel.otpCode)
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                    }
+                }.foregroundColor(Color.primary)
                 .padding()
             }
             .background(Color(UIColor.secondarySystemBackground))
