@@ -96,15 +96,15 @@ extension NightscoutUploader {
 
 extension NightscoutUploader {
 
-    func uploadDoses(_ doses: [DoseEntry], usingObjectIdCache objectIdCache: ObjectIdCache, completion: @escaping (Result<[String], Error>) -> Void) {
-        guard !doses.isEmpty else {
+    func createDoses(_ data: [DoseEntry], usingObjectIdCache objectIdCache: ObjectIdCache, completion: @escaping (Result<[String], Error>) -> Void) {
+        guard !data.isEmpty else {
             completion(.success([]))
             return
         }
 
         let source = "loop://\(UIDevice.current.name)"
         
-        let treatments = doses.compactMap { (dose) -> NightscoutTreatment? in
+        let treatments = data.compactMap { (dose) -> NightscoutTreatment? in
             var objectId: String? = nil
             
             if let syncIdentifier = dose.syncIdentifier {
@@ -121,6 +121,29 @@ extension NightscoutUploader {
                 completion(.failure(error))
             case .success(let objectIds):
                 completion(.success(objectIds))
+            }
+        }
+    }
+
+    func deleteDoses(_ data: [DoseEntry], usingObjectIdCache objectIdCache: ObjectIdCache, completion: @escaping (Result<Bool, Error>) -> Void) {
+
+        let objectIds = data.compactMap { (doseEntry) -> String? in
+            if let syncIdentifier = doseEntry.syncIdentifier {
+                return objectIdCache.findObjectIdBySyncIdentifier(syncIdentifier)
+            }
+            return nil
+        }
+
+        guard !objectIds.isEmpty else {
+            completion(.success(false))
+            return
+        }
+
+        deleteTreatmentsByObjectId(objectIds) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(true))
             }
         }
     }
