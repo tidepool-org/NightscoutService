@@ -21,13 +21,15 @@ extension DoseEntry {
             return BolusNightscoutTreatment(
                 timestamp: startDate,
                 enteredBy: source,
-                bolusType: duration > 0 ? .Square : .Normal,
+                bolusType: duration >= TimeInterval(minutes: 30) ? .Square : .Normal,
                 amount: deliveredUnits ?? programmedUnits,
                 programmed: programmedUnits,  // Persisted pump events are always completed
                 unabsorbed: 0,  // The pump's reported IOB isn't relevant, nor stored
                 duration: duration,
+                automatic: automatic ?? false,
                 /* id: objectId, */ /// Specifying _id only works when doing a put (modify); all dose uploads are currently posting so they can be either create or update
-                syncIdentifier: syncIdentifier
+                syncIdentifier: syncIdentifier,
+                insulinType: insulinType?.brandName
             )
         case .resume:
             return PumpResumeTreatment(timestamp: startDate, enteredBy: source, /* id: objectId, */ syncIdentifier: syncIdentifier)
@@ -42,8 +44,10 @@ extension DoseEntry {
                 absolute: unitsPerHour,
                 duration: endDate.timeIntervalSince(startDate),
                 amount: deliveredUnits,
+                automatic: automatic ?? true,
                 /* id: objectId, */ /// Specifying _id only works when doing a put (modify); all dose uploads are currently posting so they can be either create or update
-                syncIdentifier: syncIdentifier
+                syncIdentifier: syncIdentifier,
+                insulinType: insulinType?.brandName
             )
         }
     }

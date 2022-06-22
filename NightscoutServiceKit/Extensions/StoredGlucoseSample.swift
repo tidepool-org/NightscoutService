@@ -11,12 +11,30 @@ import NightscoutUploadKit
 
 extension StoredGlucoseSample {
 
-    var nightscoutEntry: NightscoutEntry {
-        return NightscoutEntry(
-            glucose: Int(quantity.doubleValue(for: .milligramsPerDeciliter)),
-            timestamp: startDate,
-            device: "loop://\(UIDevice.current.name)",
-            glucoseType: .Sensor
+    var glucoseEntry: GlucoseEntry {
+        let glucoseTrend: GlucoseEntry.GlucoseTrend?
+        if let trend = trend {
+            glucoseTrend = GlucoseEntry.GlucoseTrend(rawValue: trend.rawValue)
+        } else {
+            glucoseTrend = nil
+        }
+
+        let deviceString: String
+
+        if let device = device, let manufacturer = device.manufacturer, let model = device.model, let software = device.softwareVersion {
+            deviceString = "loop://\(manufacturer)/\(model)/\(software)"
+        } else {
+            deviceString = "loop://\(UIDevice.current.name)"
+        }
+
+        return GlucoseEntry(
+            glucose: quantity.doubleValue(for: .milligramsPerDeciliter),
+            date: startDate,
+            device: deviceString,
+            glucoseType: wasUserEntered ? .meter : .sensor,
+            trend: glucoseTrend,
+            changeRate: trendRate?.doubleValue(for: .milligramsPerDeciliterPerMinute),
+            isCalibration: isDisplayOnly
         )
     }
 

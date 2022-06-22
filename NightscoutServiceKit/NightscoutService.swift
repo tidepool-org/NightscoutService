@@ -11,6 +11,12 @@ import HealthKit
 import LoopKit
 import NightscoutUploadKit
 
+public enum NightscoutServiceError: Error {
+    case incompatibleTherapySettings
+    case missingCredentials
+}
+
+
 public final class NightscoutService: Service {
 
     public static let serviceIdentifier = "NightscoutService"
@@ -27,6 +33,8 @@ public final class NightscoutService: Service {
     
     public var isOnboarded: Bool
 
+    public let otpManager: OTPManager
+    
     /// Maps loop syncIdentifiers to Nightscout objectIds
     var objectIdCache: ObjectIdCache {
         get {
@@ -38,18 +46,24 @@ public final class NightscoutService: Service {
     }
     private let lockedObjectIdCache: Locked<ObjectIdCache>
 
-    private lazy var uploader: NightscoutUploader? = {
-        guard let siteURL = siteURL, let apiSecret = apiSecret else {
-            return nil
+    private var _uploader: NightscoutUploader?
+
+    private var uploader: NightscoutUploader? {
+        if _uploader == nil {
+            guard let siteURL = siteURL, let apiSecret = apiSecret else {
+                return nil
+            }
+            _uploader = NightscoutUploader(siteURL: siteURL, APISecret: apiSecret)
         }
-        return NightscoutUploader(siteURL: siteURL, APISecret: apiSecret)
-    }()
+        return _uploader
+    }
 
     private let log = OSLog(category: "NightscoutService")
 
     public init() {
         self.isOnboarded = false
         self.lockedObjectIdCache = Locked(ObjectIdCache())
+        self.otpManager = OTPManager(secretStore: KeychainManager())
     }
 
     public required init?(rawState: RawStateValue) {
@@ -62,6 +76,8 @@ public final class NightscoutService: Service {
         } else {
             self.lockedObjectIdCache = Locked(ObjectIdCache())
         }
+        
+        self.otpManager = OTPManager(secretStore: KeychainManager())
         
         restoreCredentials()
     }
@@ -77,6 +93,7 @@ public final class NightscoutService: Service {
 
     public func verifyConfiguration(completion: @escaping (Error?) -> Void) {
         guard hasConfiguration, let siteURL = siteURL, let apiSecret = apiSecret else {
+            completion(NightscoutServiceError.missingCredentials)
             return
         }
 
@@ -125,6 +142,38 @@ public final class NightscoutService: Service {
 }
 
 extension NightscoutService: RemoteDataService {
+
+    public func uploadTemporaryOverrideData(updated: [LoopKit.TemporaryScheduleOverride], deleted: [LoopKit.TemporaryScheduleOverride], completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard let uploader = uploader else {
+            completion(.success(true))
+            return
+        }
+
+        let updates = updated.map { OverrideTreatment(override: $0) }
+
+        let deletions = deleted.map { $0.syncIdentifier.uuidString }
+
+        uploader.deleteTreatmentsById(deletions, completionHandler: { (error) in
+            if let error = error {
+                self.log.error("Overrides deletions failed to delete %{public}@: %{public}@", String(describing: deletions), String(describing: error))
+            } else {
+                if deletions.count > 0 {
+                    self.log.debug("Deleted ids: %@", deletions)
+                }
+                uploader.upload(updates) { (result) in
+                    switch result {
+                    case .failure(let error):
+                        self.log.error("Failed to upload overrides %{public}@: %{public}@", String(describing: updates.map {$0.dictionaryRepresentation}), String(describing: error))
+                        completion(.failure(error))
+                    case .success:
+                        self.log.debug("Uploaded overrides %@", String(describing: updates.map {$0.dictionaryRepresentation}))
+                        completion(.success(true))
+                    }
+                }
+            }
+        })
+    }
+
 
     public var alertDataLimit: Int? { return 1000 }
 
@@ -183,7 +232,7 @@ extension NightscoutService: RemoteDataService {
             return
         }
 
-        uploader.createDoses(created.filter { !$0.isMutable } , usingObjectIdCache: self.objectIdCache) { (result) in
+        uploader.createDoses(created, usingObjectIdCache: self.objectIdCache) { (result) in
             switch (result) {
             case .failure(let error):
                 completion(.failure(error))
@@ -248,6 +297,35 @@ extension NightscoutService: RemoteDataService {
         }
 
         uploader.uploadProfiles(stored.compactMap { $0.profileSet }, completion: completion)
+    }
+    
+    public func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Bool {
+        guard let otpToValidate = notification["otp"] as? String else {
+            return false
+        }
+
+        return otpManager.validateOTP(otpToValidate: otpToValidate)
+    }
+    
+    public func fetchStoredTherapySettings(completion: @escaping (Result<(TherapySettings,Date), Error>) -> Void) {
+        guard let uploader = uploader else {
+            completion(.failure(NightscoutServiceError.missingCredentials))
+            return
+        }
+
+        uploader.fetchCurrentProfile(completion: { result in
+            switch result {
+            case .success(let profileSet):
+                if let therapySettings = profileSet.therapySettings {
+                    completion(.success((therapySettings,profileSet.startDate)))
+                } else {
+                    completion(.failure(NightscoutServiceError.incompatibleTherapySettings))
+                }
+                break
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
     }
 
 }
