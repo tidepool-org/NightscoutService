@@ -55,7 +55,17 @@ class OTPManagerTestCase: XCTestCase {
     }
     
     func getTestSequence() -> OTPTestSequence {
-        return OTPTestSequence(secretKey: "2IOF4MG5QSAKMIYD6QJKOBZFH2QV2CYG", tokenName: "Test Key", endDate: Date(timeIntervalSince1970: 1628864018.933351), otpAscendingPasswords: ["387356", "373945"])
+        /*
+         To get sequence of OTP codes from an independent source for these tests:
+         
+         1. Go to https://cryptotools.net/otp
+         2. Copy the test secretKey below to website
+         3. Note the Epoch time from site
+         4. Note the next 2 consecutive codes
+         5. Update the endDate below with (epoch time + 30)
+         6. Update codes below
+         */
+        return OTPTestSequence(secretKey: "2IOF4MG5QSAKMIYD6QJKOBZFH2QV2CYG", tokenName: "Test Key", endDate: Date(timeIntervalSince1970: 1655326953), otpAscendingPasswords: ["928595", "278849"])
     }
 }
 

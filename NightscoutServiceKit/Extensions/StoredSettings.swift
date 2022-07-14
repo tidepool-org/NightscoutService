@@ -78,7 +78,7 @@ extension StoredSettings {
 
         return ProfileSet(
             startDate: date,
-            units: bloodGlucoseUnit.shortLocalizedUnitString(),
+            units: bloodGlucoseUnit.shortLocalizedUnitString(avoidLineBreaking: false),
             enteredBy: "Loop",
             defaultProfile: "Default",
             store: ["Default": profile],

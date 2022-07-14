@@ -23,7 +23,11 @@ extension ProfileSet {
         }
 
         let glucoseUnit: HKUnit
-        if units == "mmol/L" {
+        // Some versions of Loop incorrectly uploaded units with
+        // special characters to avoid line breaking.
+        if units == HKUnit.millimolesPerLiter.shortLocalizedUnitString() ||
+           units == HKUnit.millimolesPerLiter.shortLocalizedUnitString(avoidLineBreaking: false)
+        {
             glucoseUnit = .millimolesPerLiter
         } else {
             glucoseUnit = .milligramsPerDeciliter
