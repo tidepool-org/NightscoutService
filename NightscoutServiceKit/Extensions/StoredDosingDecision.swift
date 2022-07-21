@@ -61,17 +61,20 @@ extension StoredDosingDecision {
     }
     
     var loopStatusEnacted: LoopEnacted? {
-        guard let automaticDoseRecommendation = automaticDoseRecommendation, errors.isEmpty, let tempBasal = automaticDoseRecommendation.basalAdjustment else {
+        guard let automaticDoseRecommendation = automaticDoseRecommendation, errors.isEmpty else {
             return nil
         }
-        return LoopEnacted(rate: tempBasal.unitsPerHour, duration: tempBasal.duration, timestamp: date, received: true, bolusVolume: automaticDoseRecommendation.bolusUnits ?? 0)
+        let tempBasal = automaticDoseRecommendation.basalAdjustment
+        // NS needs to be updated to support an "enacted" field with no rate. Once that happens, we should not report a fake cancel here, and rate/duration should be nil instead of 0
+        return LoopEnacted(rate: tempBasal?.unitsPerHour ?? 0, duration: tempBasal?.duration ?? 0, timestamp: date, received: true, bolusVolume: automaticDoseRecommendation.bolusUnits ?? 0)
     }
 
     var loopStatusFailureReason: String? {
         return errors.first?.description
     }
     
-    var loopStatus: LoopStatus {
+    func loopStatus(automaticDoseDecision: StoredDosingDecision?) -> LoopStatus {
+
         return LoopStatus(name: Bundle.main.bundleDisplayName,
                           version: Bundle.main.fullVersionString,
                           timestamp: date,
@@ -80,8 +83,8 @@ extension StoredDosingDecision {
                           predicted: loopStatusPredicted,
                           automaticDoseRecommendation: loopStatusAutomaticDoseRecommendation,
                           recommendedBolus: loopStatusRecommendedBolus,
-                          enacted: loopStatusEnacted,
-                          failureReason: loopStatusFailureReason)
+                          enacted: automaticDoseDecision?.loopStatusEnacted,
+                          failureReason: automaticDoseDecision?.loopStatusFailureReason)
     }
     
     var pumpStatusBattery: BatteryStatus? {
@@ -153,12 +156,12 @@ extension StoredDosingDecision {
         return UploaderStatus(name: uploaderDevice.name, timestamp: date, battery: battery)
     }
     
-    var deviceStatus: DeviceStatus {
+    func deviceStatus(automaticDoseDecision: StoredDosingDecision?) -> DeviceStatus {
         return DeviceStatus(device: "loop://\(UIDevice.current.name)",
             timestamp: date,
             pumpStatus: pumpStatus,
             uploaderStatus: uploaderStatus,
-            loopStatus: loopStatus,
+            loopStatus: loopStatus(automaticDoseDecision: automaticDoseDecision),
             overrideStatus: overrideStatus)
     }
     

@@ -11,38 +11,55 @@ import NightscoutUploadKit
 import LoopKit
 import HealthKit
 
-extension ProfileSet {
-    var therapySettings: TherapySettings? {
-        guard let profile = store["Default"] else {
-            // no default profile stored
-            return nil
-        }
-
-        guard let glucoseSafetyLimit = settings.minimumBGGuard else {
-            return nil
-        }
-
-        let glucoseUnit: HKUnit
+private extension HKUnit {
+    static func glucoseUnitFromNightscoutUnitString(_ unitString: String) -> HKUnit? {
         // Some versions of Loop incorrectly uploaded units with
         // special characters to avoid line breaking.
-        if units == HKUnit.millimolesPerLiter.shortLocalizedUnitString() ||
-           units == HKUnit.millimolesPerLiter.shortLocalizedUnitString(avoidLineBreaking: false)
+        if unitString == HKUnit.millimolesPerLiter.shortLocalizedUnitString() ||
+            unitString == HKUnit.millimolesPerLiter.shortLocalizedUnitString(avoidLineBreaking: false)
         {
-            glucoseUnit = .millimolesPerLiter
+            return .millimolesPerLiter
+        }
+
+        if unitString == HKUnit.milligramsPerDeciliter.shortLocalizedUnitString() ||
+            unitString == HKUnit.milligramsPerDeciliter.shortLocalizedUnitString(avoidLineBreaking: false)
+        {
+            return .milligramsPerDeciliter
+        }
+
+        return nil
+    }
+}
+
+extension ProfileSet {
+    var therapySettings: TherapySettings? {
+
+        guard let profile = store["Default"],
+              let glucoseSafetyLimit = settings.minimumBGGuard,
+              let settingsGlucoseUnit = HKUnit.glucoseUnitFromNightscoutUnitString(units)
+        else {
+            return nil
+        }
+
+        // If units are specified on the schedule, prefer those over the units specified on the ProfileSet
+        let scheduleGlucoseUnit: HKUnit
+        if let profileUnitString = profile.units, let profileUnit = HKUnit.glucoseUnitFromNightscoutUnitString(profileUnitString)
+        {
+            scheduleGlucoseUnit = profileUnit
         } else {
-            glucoseUnit = .milligramsPerDeciliter
+            scheduleGlucoseUnit = settingsGlucoseUnit
         }
 
         let targetItems: [RepeatingScheduleValue<DoubleRange>] = zip(profile.targetLow, profile.targetHigh).map { (low,high) in
             return RepeatingScheduleValue(startTime: low.offset, value: DoubleRange(minValue: low.value, maxValue: high.value))
         }
 
-        let targetRangeSchedule = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: targetItems, timeZone: profile.timeZone)
+        let targetRangeSchedule = GlucoseRangeSchedule(unit: scheduleGlucoseUnit, dailyItems: targetItems, timeZone: profile.timeZone)
 
         let correctionRangeOverrides: CorrectionRangeOverrides?
         if let range = settings.preMealTargetRange {
             correctionRangeOverrides = CorrectionRangeOverrides(
-                preMeal: GlucoseRange(minValue: range.lowerBound, maxValue: range.upperBound, unit: glucoseUnit),
+                preMeal: GlucoseRange(minValue: range.lowerBound, maxValue: range.upperBound, unit: settingsGlucoseUnit),
                 workout: nil // No longer used
             )
         } else {
@@ -54,7 +71,7 @@ extension ProfileSet {
             timeZone: profile.timeZone)
 
         let sensitivitySchedule = InsulinSensitivitySchedule(
-            unit: glucoseUnit,
+            unit: scheduleGlucoseUnit,
             dailyItems: profile.sensitivity.map { RepeatingScheduleValue(startTime: $0.offset, value: $0.value) },
             timeZone: profile.timeZone)
 
@@ -67,10 +84,10 @@ extension ProfileSet {
         return TherapySettings(
             glucoseTargetRangeSchedule: targetRangeSchedule,
             correctionRangeOverrides: correctionRangeOverrides,
-            overridePresets: settings.overridePresets.compactMap { $0.loopOverride(for: glucoseUnit) },
+            overridePresets: settings.overridePresets.compactMap { $0.loopOverride(for: settingsGlucoseUnit) },
             maximumBasalRatePerHour: settings.maximumBasalRatePerHour,
             maximumBolus: settings.maximumBolus,
-            suspendThreshold: GlucoseThreshold(unit: glucoseUnit, value: glucoseSafetyLimit),
+            suspendThreshold: GlucoseThreshold(unit: settingsGlucoseUnit, value: glucoseSafetyLimit),
             insulinSensitivitySchedule: sensitivitySchedule,
             carbRatioSchedule: carbSchedule,
             basalRateSchedule: basalSchedule,

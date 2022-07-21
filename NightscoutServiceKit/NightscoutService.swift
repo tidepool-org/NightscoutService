@@ -89,6 +89,8 @@ public final class NightscoutService: Service {
         ]
     }
 
+    public var lastDosingDecisionForAutomaticDose: StoredDosingDecision?
+
     public var hasConfiguration: Bool { return siteURL != nil && apiSecret?.isEmpty == false }
 
     public func verifyConfiguration(completion: @escaping (Error?) -> Void) {
@@ -268,7 +270,37 @@ extension NightscoutService: RemoteDataService {
             return
         }
 
-        uploader.uploadDeviceStatuses(stored.map { $0.deviceStatus }, completion: completion)
+        var uploadPairs: [(StoredDosingDecision, StoredDosingDecision?)] = []
+
+        for decision in stored {
+            switch decision.reason {
+            case "loop":
+                lastDosingDecisionForAutomaticDose = decision
+            case "updateRecommendedManualBolus", "normalBolus", "simpleBolus", "watchBolus":
+                uploadPairs.append((decision, lastDosingDecisionForAutomaticDose))
+            default:
+                break
+            }
+        }
+
+        let statuses = uploadPairs.map { (decision, automaticDoseDecision) in
+            return decision.deviceStatus(automaticDoseDecision: automaticDoseDecision)
+        }
+
+        guard statuses.count > 0 else {
+            completion(.success(false))
+            return
+        }
+
+        uploader.uploadDeviceStatuses(statuses) { result in
+            switch result {
+            case .success:
+                self.lastDosingDecisionForAutomaticDose = nil
+            default:
+                break
+            }
+            completion(result)
+        }
     }
 
     public var glucoseDataLimit: Int? { return 1000 }

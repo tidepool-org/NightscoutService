@@ -10,6 +10,28 @@ import HealthKit
 import LoopKit
 import NightscoutUploadKit
 
+extension AutomaticDosingStrategy {
+    var name: String {
+        switch self {
+        case .automaticBolus:
+            return "automaticBolus"
+        case .tempBasalOnly:
+            return "tempBasalOnly"
+        }
+    }
+
+    init?(name: String) {
+        switch name {
+        case "automaticBolus":
+            self = .automaticBolus
+        case "tempBasalOnly":
+            self = .tempBasalOnly
+        default:
+            return nil
+        }
+    }
+}
+
 extension StoredSettings {
 
     var loopSettings: NightscoutUploadKit.LoopSettings? {
@@ -25,11 +47,6 @@ extension StoredSettings {
                     upper: preMealTargetRange.maxValue))
         }
 
-        var deviceTokenData: Data?
-        if let deviceToken = deviceToken {
-            deviceTokenData = Data(hexadecimalString: deviceToken)
-        }
-
         return NightscoutUploadKit.LoopSettings(
             dosingEnabled: dosingEnabled,
             overridePresets: overridePresets?.map { $0.nsScheduleOverride(for: bloodGlucoseUnit) } ?? [],
@@ -38,16 +55,18 @@ extension StoredSettings {
             preMealTargetRange: nightscoutPreMealTargetRange,
             maximumBasalRatePerHour: maximumBasalRatePerHour,
             maximumBolus: maximumBolus,
-            deviceToken: deviceTokenData,
-            bundleIdentifier: Bundle.main.bundleIdentifier)
+            deviceToken: deviceToken,
+            bundleIdentifier: Bundle.main.bundleIdentifier,
+            dosingStrategy: automaticDosingStrategy.name)
     }
 
     var profile: ProfileSet.Profile? {
         guard let basalRateSchedule = basalRateSchedule,
             let defaultRapidActingModel = defaultRapidActingModel,
             let carbRatioSchedule = carbRatioSchedule,
-            let insulinSensitivitySchedule = insulinSensitivitySchedule,
-            let glucoseTargetRangeSchedule = glucoseTargetRangeSchedule else
+            let glucoseTargetRangeSchedule = glucoseTargetRangeSchedule,
+            let insulinSensitivitySchedule = insulinSensitivitySchedule?.schedule(for: glucoseTargetRangeSchedule.unit)
+             else
         {
             return nil
         }
@@ -68,7 +87,7 @@ extension StoredSettings {
             basal: basalRateSchedule.items.scheduleItems,
             targetLow: targetLowItems,
             targetHigh: targetHighItems,
-            units: glucoseTargetRangeSchedule.unit.shortLocalizedUnitString())
+            units: glucoseTargetRangeSchedule.unit.shortLocalizedUnitString(avoidLineBreaking: false))
     }
 
     var profileSet: ProfileSet? {
