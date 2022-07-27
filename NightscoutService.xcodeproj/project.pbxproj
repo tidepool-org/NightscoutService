@@ -15,7 +15,6 @@
 		A90E39A922BC7AD10016DFE8 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90E39A822BC7AD10016DFE8 /* Bundle.swift */; };
 		A91BAC2522BC691A00ABF1BB /* NightscoutServiceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC1B22BC691A00ABF1BB /* NightscoutServiceKit.framework */; };
 		A91BAC2C22BC691A00ABF1BB /* NightscoutServiceKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A91BAC1E22BC691A00ABF1BB /* NightscoutServiceKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A91BAC4322BC69B500ABF1BB /* NightscoutServiceKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC3A22BC69B500ABF1BB /* NightscoutServiceKitUI.framework */; };
 		A91BAC4A22BC69B500ABF1BB /* NightscoutServiceKitUI.h in Headers */ = {isa = PBXBuildFile; fileRef = A91BAC3C22BC69B500ABF1BB /* NightscoutServiceKitUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91BAC5B22BC6DAC00ABF1BB /* NightscoutServiceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A91BAC1B22BC691A00ABF1BB /* NightscoutServiceKit.framework */; };
 		A9246B2526231B3A00CCDCB3 /* OTPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9246B2426231B3A00CCDCB3 /* OTPManager.swift */; };
@@ -73,13 +72,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = A91BAC1A22BC691A00ABF1BB;
 			remoteInfo = NightscoutService;
-		};
-		A91BAC4422BC69B500ABF1BB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A91BAC1222BC691A00ABF1BB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A91BAC3922BC69B500ABF1BB;
-			remoteInfo = NightscoutServiceKitUI;
 		};
 		A91BAC5122BC69BB00ABF1BB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -142,8 +134,6 @@
 		A91BAC3A22BC69B500ABF1BB /* NightscoutServiceKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NightscoutServiceKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A91BAC3C22BC69B500ABF1BB /* NightscoutServiceKitUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutServiceKitUI.h; sourceTree = "<group>"; };
 		A91BAC3D22BC69B500ABF1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A91BAC4222BC69B500ABF1BB /* NightscoutServiceKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NightscoutServiceKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A91BAC4922BC69B500ABF1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9246B2426231B3A00CCDCB3 /* OTPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPManager.swift; sourceTree = "<group>"; };
 		A934B6152358F42A00949C8B /* StoredDosingDecision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredDosingDecision.swift; sourceTree = "<group>"; };
 		A934B6172358F49300949C8B /* StoredSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredSettings.swift; sourceTree = "<group>"; };
@@ -249,14 +239,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A91BAC3F22BC69B500ABF1BB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A91BAC4322BC69B500ABF1BB /* NightscoutServiceKitUI.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A99C712E23396CB100AB9035 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -295,7 +277,6 @@
 				A91BAC1D22BC691A00ABF1BB /* NightscoutServiceKit */,
 				A91BAC2822BC691A00ABF1BB /* NightscoutServiceKitTests */,
 				A91BAC3B22BC69B500ABF1BB /* NightscoutServiceKitUI */,
-				A91BAC4622BC69B500ABF1BB /* NightscoutServiceKitUITests */,
 				A99C713223396CB100AB9035 /* NightscoutServiceKitPlugin */,
 				A91BAC1C22BC691A00ABF1BB /* Products */,
 				A91BAC5522BC6D9900ABF1BB /* Frameworks */,
@@ -308,7 +289,6 @@
 				A91BAC1B22BC691A00ABF1BB /* NightscoutServiceKit.framework */,
 				A91BAC2422BC691A00ABF1BB /* NightscoutServiceKitTests.xctest */,
 				A91BAC3A22BC69B500ABF1BB /* NightscoutServiceKitUI.framework */,
-				A91BAC4222BC69B500ABF1BB /* NightscoutServiceKitUITests.xctest */,
 				A99C713123396CB100AB9035 /* NightscoutServiceKitPlugin.loopplugin */,
 			);
 			name = Products;
@@ -352,14 +332,6 @@
 				C1E7038F2507178300DAB534 /* Views */,
 			);
 			path = NightscoutServiceKitUI;
-			sourceTree = "<group>";
-		};
-		A91BAC4622BC69B500ABF1BB /* NightscoutServiceKitUITests */ = {
-			isa = PBXGroup;
-			children = (
-				A91BAC4922BC69B500ABF1BB /* Info.plist */,
-			);
-			path = NightscoutServiceKitUITests;
 			sourceTree = "<group>";
 		};
 		A91BAC5522BC6D9900ABF1BB /* Frameworks */ = {
@@ -500,7 +472,6 @@
 				A91BAC2022BC691A00ABF1BB /* Sources */,
 				A91BAC2122BC691A00ABF1BB /* Frameworks */,
 				A91BAC2222BC691A00ABF1BB /* Resources */,
-				A91BAC5322BC6CC900ABF1BB /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -532,25 +503,6 @@
 			productName = NightscoutServiceKitUI;
 			productReference = A91BAC3A22BC69B500ABF1BB /* NightscoutServiceKitUI.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		A91BAC4122BC69B500ABF1BB /* NightscoutServiceKitUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A91BAC4E22BC69B500ABF1BB /* Build configuration list for PBXNativeTarget "NightscoutServiceKitUITests" */;
-			buildPhases = (
-				A91BAC3E22BC69B500ABF1BB /* Sources */,
-				A91BAC3F22BC69B500ABF1BB /* Frameworks */,
-				A91BAC4022BC69B500ABF1BB /* Resources */,
-				A91BAC5422BC6D0100ABF1BB /* Copy Frameworks with Carthage */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A91BAC4522BC69B500ABF1BB /* PBXTargetDependency */,
-			);
-			name = NightscoutServiceKitUITests;
-			productName = NightscoutServiceKitUITests;
-			productReference = A91BAC4222BC69B500ABF1BB /* NightscoutServiceKitUITests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		A99C713023396CB100AB9035 /* NightscoutServiceKitPlugin */ = {
 			isa = PBXNativeTarget;
@@ -596,9 +548,6 @@
 					A91BAC3922BC69B500ABF1BB = {
 						CreatedOnToolsVersion = 10.2.1;
 					};
-					A91BAC4122BC69B500ABF1BB = {
-						CreatedOnToolsVersion = 10.2.1;
-					};
 					A99C713023396CB100AB9035 = {
 						CreatedOnToolsVersion = 11.0;
 					};
@@ -641,7 +590,6 @@
 				A91BAC1A22BC691A00ABF1BB /* NightscoutServiceKit */,
 				A91BAC2322BC691A00ABF1BB /* NightscoutServiceKitTests */,
 				A91BAC3922BC69B500ABF1BB /* NightscoutServiceKitUI */,
-				A91BAC4122BC69B500ABF1BB /* NightscoutServiceKitUITests */,
 				A99C713023396CB100AB9035 /* NightscoutServiceKitPlugin */,
 			);
 		};
@@ -672,13 +620,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A91BAC4022BC69B500ABF1BB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A99C712F23396CB100AB9035 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -687,55 +628,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		A91BAC5322BC6CC900ABF1BB /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/NightscoutUploadKit.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LoopKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/NightscoutUploadKit.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "CARTHAGE_BUILD_DIR=\"${SRCROOT}/Carthage/Build\"\nif [ -n \"${IPHONEOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/iOS\"\nelif [ -n \"${WATCHOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/watchOS\"\nelse\n    echo \"ERROR: Unexpected deployment target type\"\n    exit 1\nfi\n\nfor SCRIPT_INPUT_FILE in ${!SCRIPT_INPUT_FILE_*}; do\n    CARTHAGE_BUILD_FILE=\"${!SCRIPT_INPUT_FILE/${BUILT_PRODUCTS_DIR}/${CARTHAGE_BUILD_DIR}}\"\n    if [ -e \"${CARTHAGE_BUILD_FILE}\" ]; then\n        if [ -e \"${SCRIPT_INPUT_FILE}\" ]; then\n            echo \"ERROR: Duplicate frameworks found at:\"\n            echo \"  ${SCRIPT_INPUT_FILE}\"\n            echo \"  ${CARTHAGE_BUILD_FILE}\"\n            exit 1\n        fi\n        echo \"Substituting \\\"${CARTHAGE_BUILD_FILE}\\\" for \\\"${!SCRIPT_INPUT_FILE}\\\"\"\n        export ${SCRIPT_INPUT_FILE}=\"${CARTHAGE_BUILD_FILE}\"\n    fi\ndone\n\necho \"Copy Frameworks with Carthage\"\ncarthage copy-frameworks\n";
-		};
-		A91BAC5422BC6D0100ABF1BB /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/LoopKitUI.framework",
-				"$(BUILT_PRODUCTS_DIR)/NightscoutUploadKit.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LoopKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LoopKitUI.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/NightscoutUploadKit.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "CARTHAGE_BUILD_DIR=\"${SRCROOT}/Carthage/Build\"\nif [ -n \"${IPHONEOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/iOS\"\nelif [ -n \"${WATCHOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/watchOS\"\nelse\n    echo \"ERROR: Unexpected deployment target type\"\n    exit 1\nfi\n\nfor SCRIPT_INPUT_FILE in ${!SCRIPT_INPUT_FILE_*}; do\n    CARTHAGE_BUILD_FILE=\"${!SCRIPT_INPUT_FILE/${BUILT_PRODUCTS_DIR}/${CARTHAGE_BUILD_DIR}}\"\n    if [ -e \"${CARTHAGE_BUILD_FILE}\" ]; then\n        if [ -e \"${SCRIPT_INPUT_FILE}\" ]; then\n            echo \"ERROR: Duplicate frameworks found at:\"\n            echo \"  ${SCRIPT_INPUT_FILE}\"\n            echo \"  ${CARTHAGE_BUILD_FILE}\"\n            exit 1\n        fi\n        echo \"Substituting \\\"${CARTHAGE_BUILD_FILE}\\\" for \\\"${!SCRIPT_INPUT_FILE}\\\"\"\n        export ${SCRIPT_INPUT_FILE}=\"${CARTHAGE_BUILD_FILE}\"\n    fi\ndone\n\necho \"Copy Frameworks with Carthage\"\ncarthage copy-frameworks\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A91BAC1722BC691A00ABF1BB /* Sources */ = {
@@ -795,13 +687,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A91BAC3E22BC69B500ABF1BB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A99C712D23396CB100AB9035 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -819,11 +704,6 @@
 			isa = PBXTargetDependency;
 			target = A91BAC1A22BC691A00ABF1BB /* NightscoutServiceKit */;
 			targetProxy = A91BAC2622BC691A00ABF1BB /* PBXContainerItemProxy */;
-		};
-		A91BAC4522BC69B500ABF1BB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A91BAC3922BC69B500ABF1BB /* NightscoutServiceKitUI */;
-			targetProxy = A91BAC4422BC69B500ABF1BB /* PBXContainerItemProxy */;
 		};
 		A91BAC5222BC69BB00ABF1BB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1269,40 +1149,6 @@
 			};
 			name = Release;
 		};
-		A91BAC4F22BC69B500ABF1BB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = NightscoutServiceKitUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.NightscoutServiceKitUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		A91BAC5022BC69B500ABF1BB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = NightscoutServiceKitUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.NightscoutServiceKitUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		A99C713623396CB100AB9035 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1392,15 +1238,6 @@
 			buildConfigurations = (
 				A91BAC4C22BC69B500ABF1BB /* Debug */,
 				A91BAC4D22BC69B500ABF1BB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A91BAC4E22BC69B500ABF1BB /* Build configuration list for PBXNativeTarget "NightscoutServiceKitUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A91BAC4F22BC69B500ABF1BB /* Debug */,
-				A91BAC5022BC69B500ABF1BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
