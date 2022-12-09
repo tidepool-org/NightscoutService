@@ -62,7 +62,6 @@ extension StoredSettings {
 
     var profile: ProfileSet.Profile? {
         guard let basalRateSchedule = basalRateSchedule,
-            let defaultRapidActingModel = defaultRapidActingModel,
             let carbRatioSchedule = carbRatioSchedule,
             let glucoseTargetRangeSchedule = glucoseTargetRangeSchedule,
             let insulinSensitivitySchedule = insulinSensitivitySchedule?.schedule(for: glucoseTargetRangeSchedule.unit)
@@ -81,7 +80,7 @@ extension StoredSettings {
 
         return ProfileSet.Profile(
             timezone: basalRateSchedule.timeZone,
-            dia: defaultRapidActingModel.actionDuration,
+            dia: .hours(6),
             sensitivity: insulinSensitivitySchedule.items.scheduleItems,
             carbratio: carbRatioSchedule.items.scheduleItems,
             basal: basalRateSchedule.items.scheduleItems,
