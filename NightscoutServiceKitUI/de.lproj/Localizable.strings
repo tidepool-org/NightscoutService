@@ -2,7 +2,7 @@
 "API Secret" = "API Secret";
 
 /* No comment provided by engineer. */
-"Are you sure you want to reset the secret key?" = "Möchtest Du wirklich den geheimen Schlüssel zurücksetzen?";
+"Are you sure you want to reset the secret key?" = "Möchten Sie wirklich den geheimen Schlüssel zurücksetzen?";
 
 /* Button text to cancel Nightscout credential input */
 "Cancel" = "Abbrechen";
@@ -11,7 +11,7 @@
 "Checking..." = "Prüfe…";
 
 /* Button title to delete a service */
-"Delete Service" = "Delete Service";
+"Delete Service" = "Dienst löschen";
 
 /* No comment provided by engineer. */
 "Done" = "Fertig";
@@ -20,7 +20,7 @@
 "https://mysite.herokuapp.com" = "https://mysite.herokuapp.com";
 
 /* Button text to login on Nightscout CredentialsView */
-"Login" = "Anmelden";
+"Login" = "Einloggen";
 
 /* No comment provided by engineer. */
 "Logout" = "Abmelden";
@@ -47,7 +47,7 @@
 "Reset Secret Key" = "Geheimen Schlüssel zurücksetzen";
 
 /* The title of the Nightscout site URL */
-"Site URL" = "Seiten-URL";
+"Site URL" = "Website URL";
 
 /* No comment provided by engineer. */
 "Status" = "Status";

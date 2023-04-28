@@ -7,7 +7,7 @@
 //
 
 import LoopKit
-import NightscoutUploadKit
+import NightscoutKit
 
 extension DoseEntry {
 

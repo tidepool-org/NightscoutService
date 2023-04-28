@@ -8,7 +8,7 @@
 
 import HealthKit
 import LoopKit
-import NightscoutUploadKit
+import NightscoutKit
 
 extension AutomaticDosingStrategy {
     var name: String {
@@ -34,7 +34,7 @@ extension AutomaticDosingStrategy {
 
 extension StoredSettings {
 
-    var loopSettings: NightscoutUploadKit.LoopSettings? {
+    var loopSettings: NightscoutKit.LoopSettings? {
         guard let bloodGlucoseUnit = bloodGlucoseUnit else {
             return nil
         }
@@ -47,7 +47,7 @@ extension StoredSettings {
                     upper: preMealTargetRange.maxValue))
         }
 
-        return NightscoutUploadKit.LoopSettings(
+        return NightscoutKit.LoopSettings(
             dosingEnabled: dosingEnabled,
             overridePresets: overridePresets?.map { $0.nsScheduleOverride(for: bloodGlucoseUnit) } ?? [],
             scheduleOverride: scheduleOverride?.nsScheduleOverride(for: bloodGlucoseUnit),
@@ -100,7 +100,8 @@ extension StoredSettings {
             enteredBy: "Loop",
             defaultProfile: "Default",
             store: ["Default": profile],
-            settings: loopSettings)
+            settings: loopSettings,
+            syncIdentifier: syncIdentifier.uuidString)
     }
 
 }

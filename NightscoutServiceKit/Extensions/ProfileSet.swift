@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import NightscoutUploadKit
+import NightscoutKit
 import LoopKit
 import HealthKit
 
@@ -96,7 +96,7 @@ extension ProfileSet {
 }
 
 
-extension NightscoutUploadKit.TemporaryScheduleOverride  {
+extension NightscoutKit.TemporaryScheduleOverride  {
 
     func loopOverride(for unit: HKUnit) -> LoopKit.TemporaryScheduleOverridePreset? {
         guard let name = name,

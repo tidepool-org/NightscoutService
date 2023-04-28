@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import NightscoutUploadKit
+import NightscoutKit
 import LoopKit
 import HealthKit
 
