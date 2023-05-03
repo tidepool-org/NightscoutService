@@ -8,11 +8,11 @@
 
 import HealthKit
 import LoopKit
-import NightscoutUploadKit
+import NightscoutKit
 
 extension LoopKit.TemporaryScheduleOverride {
 
-    func nsScheduleOverride(for unit: HKUnit) -> NightscoutUploadKit.TemporaryScheduleOverride {
+    func nsScheduleOverride(for unit: HKUnit) -> NightscoutKit.TemporaryScheduleOverride {
         let nsTargetRange: ClosedRange<Double>?
         if let targetRange = settings.targetRange {
             nsTargetRange = ClosedRange(uncheckedBounds: (
@@ -30,7 +30,7 @@ extension LoopKit.TemporaryScheduleOverride {
             nsDuration = 0
         }
 
-        return NightscoutUploadKit.TemporaryScheduleOverride(
+        return NightscoutKit.TemporaryScheduleOverride(
             duration: nsDuration,
             targetRange: nsTargetRange,
             insulinNeedsScaleFactor: settings.insulinNeedsScaleFactor,
@@ -68,7 +68,7 @@ extension LoopKit.TemporaryScheduleOverride.Context {
 
 extension LoopKit.TemporaryScheduleOverridePreset {
 
-    func nsScheduleOverride(for unit: HKUnit) -> NightscoutUploadKit.TemporaryScheduleOverride {
+    func nsScheduleOverride(for unit: HKUnit) -> NightscoutKit.TemporaryScheduleOverride {
         let nsTargetRange: ClosedRange<Double>?
         if let targetRange = settings.targetRange {
             nsTargetRange = ClosedRange(uncheckedBounds: (
@@ -86,7 +86,7 @@ extension LoopKit.TemporaryScheduleOverridePreset {
             nsDuration = 0
         }
 
-        return NightscoutUploadKit.TemporaryScheduleOverride(
+        return NightscoutKit.TemporaryScheduleOverride(
             duration: nsDuration,
             targetRange: nsTargetRange,
             insulinNeedsScaleFactor: settings.insulinNeedsScaleFactor,

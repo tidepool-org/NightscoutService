@@ -74,41 +74,51 @@ public class OTPManager {
     let issuerName = "Loop"
     var tokenPeriod: TimeInterval
     var passwordDigitCount = 6
-    public static var defaultTokenPeriod: TimeInterval = 30
+    let maxOTPsToAccept: Int
     
-    public init(secretStore: OTPSecretStore = KeychainManager(), nowDateSource: @escaping () -> Date = {Date()}, tokenPeriod: TimeInterval = OTPManager.defaultTokenPeriod) {
+    public static var defaultTokenPeriod: TimeInterval = 30
+    public static var defaultMaxOTPsToAccept = 2
+    
+    public init(secretStore: OTPSecretStore = KeychainManager(), nowDateSource: @escaping () -> Date = {Date()}, tokenPeriod: TimeInterval = OTPManager.defaultTokenPeriod, maxOTPsToAccept: Int = OTPManager.defaultMaxOTPsToAccept) {
         self.secretStore = secretStore
         self.nowDateSource = nowDateSource
         self.tokenPeriod = tokenPeriod
+        self.maxOTPsToAccept = maxOTPsToAccept
         if secretStore.tokenSecretKey() == nil || secretStore.tokenSecretKeyName() == nil {
             resetSecretKey()
         }
     }
     
-    public func validateOTP(otpToValidate: String) -> Bool {
-        let maxOTPsToAccept = 2
+    public func validatePassword(password: String, deliveryDate: Date?) throws {
         
-        guard otpToValidate.count == passwordDigitCount && getLastPasswordsAscending(count: maxOTPsToAccept).contains(otpToValidate) else {
-            return false //Doesn't match
+        guard password.count == passwordDigitCount else {
+            throw OTPValidationError.invalidFormat(otp: password)
         }
         
-        let recentPasswords = secretStore.recentAcceptedPasswords()
-        guard !recentPasswords.contains(otpToValidate) else {
-            //Already used
-            return false
+        guard try isValidPassword(password) else {
+            let recentOTPs = try otpsSince(date: nowDateSource().addingTimeInterval(-60*60))
+            let otpIsExpired = recentOTPs.contains(where: {$0.password == password})
+            if otpIsExpired {
+                throw OTPValidationError.expired(deliveryDate: deliveryDate, maxOTPsToAccept: maxOTPsToAccept)
+            } else {
+                throw OTPValidationError.incorrectOTP(otp: password)
+            }
         }
         
-        //Only storing last 2 accepted passwords
-        var updatedRecentPasswords = recentPasswords.first != nil ? [recentPasswords.first!] : []
-        updatedRecentPasswords.append(otpToValidate)
-        do {
-            try secretStore.setRecentAcceptedPasswords(updatedRecentPasswords)
-        } catch {
-            print("Error storing \(error)")
+        let recentlyUsedOTPs = secretStore.recentAcceptedPasswords()
+        guard !recentlyUsedOTPs.contains(password) else {
+            throw OTPValidationError.previouslyUsed(otp: password)
         }
         
-        return true
-
+        try storeUsedPassword(password)
+    }
+    
+    private func storeUsedPassword(_ password: String) throws {
+        var recentOTPs = [password] + secretStore.recentAcceptedPasswords()
+        if recentOTPs.count > maxOTPsToAccept {
+            recentOTPs = Array(recentOTPs[0..<maxOTPsToAccept])
+        }
+        try secretStore.setRecentAcceptedPasswords(recentOTPs)
     }
     
     public func resetSecretKey() {
@@ -147,28 +157,61 @@ public class OTPManager {
         return Token(name: secretKeyName, issuer: issuerName, generator: generator)
     }
     
-    public func getLastPasswordsAscending(count: Int) -> [String] {
+    public func validOTPs() throws -> [OTP] {
+        return try otpsSince(date: oldestAcceptableOTPPeriod().startDate)
+    }
+    
+    func otpsSince(date: Date) throws -> [OTP] {
         
         guard let token = self.otpToken() else {
-            return []
+            throw OTPValidationError.codeGeneratorFailed
         }
         
-        let currentTimeInterval = nowDateSource().timeIntervalSince1970
-        let earliestTimeInterval = currentTimeInterval - (TimeInterval(count - 1 ) * tokenPeriod)
+        let currentOTPPeriod = currentOTPPeriod()
         
-        var toRet = [String]()
-        for timeInterval in stride(from: earliestTimeInterval, through: currentTimeInterval, by: tokenPeriod) {
-            guard let otp = try? token.generator.password(at: Date(timeIntervalSince1970: timeInterval)) else {
-                continue
+        var toRet = [OTP]()
+        for timeInterval in stride(from: date.timeIntervalSince1970, to: currentOTPPeriod.endDate.timeIntervalSince1970, by: tokenPeriod) {
+            let otpStartDate = Date(timeIntervalSince1970: timeInterval)
+            guard let password = try? token.generator.password(at: otpStartDate) else {
+                throw OTPValidationError.codeGeneratorFailed
             }
+            let otp = OTP(period: otpPeriodForDate(otpStartDate), password: password)
             toRet.append(otp)
         }
         return toRet
     }
     
-    public func currentPassword() -> String? {
+    func isValidPassword(_ password: String) throws -> Bool {
+        return try validOTPs().contains(where: {$0.password == password})
+    }
+    
+    func oldestAcceptableOTPPeriod() -> OTPPeriod {
+        let acceptedLookbackInterval = TimeInterval(maxOTPsToAccept - 1 ) * tokenPeriod
+        let startDate = currentOTPPeriod().startDate.addingTimeInterval( -acceptedLookbackInterval )
+        return otpPeriodForDate(startDate)
+    }
+    
+    func currentOTPPeriod() -> OTPPeriod {
+        return otpPeriodForDate(nowDateSource())
+    }
+    
+    func otpPeriodForDate(_ date: Date) -> OTPPeriod {
+        let startDate = date.floor(precision: tokenPeriod)
+        let endDate = startDate.addingTimeInterval(tokenPeriod)
+        return OTPPeriod(startDate: startDate, endDate: endDate)
+    }
+    
+    public func currentOTP() -> OTP? {
         //We don't use self.otpToken()?.currentPassword as the date can't be injected for testing.
-        return self.getLastPasswordsAscending(count: 1).last
+        do {
+            return try validOTPs().last
+        } catch {
+            return nil
+        }
+    }
+    
+    public func currentPassword() -> String? {
+        return currentOTP()?.password
     }
     
     public func tokenName() -> String? {
@@ -193,8 +236,49 @@ public class OTPManager {
         return components.url?.absoluteString
     }
     
+    enum OTPValidationError: LocalizedError {
+        case missingOTP
+        case expired(deliveryDate: Date?, maxOTPsToAccept: Int)
+        case previouslyUsed(otp: String)
+        case incorrectOTP(otp: String)
+        case invalidFormat(otp: String)
+        case codeGeneratorFailed
+        
+        var errorDescription: String? {
+            switch self {
+            case .missingOTP:
+                return "Error: Password is required."
+            case .expired(let deliveryDate, let maxOTPsToAccept):
+                if let deliveryDate = deliveryDate {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "h:mm"
+                    return String(format: "Error: Password sent at %@ has expired. Only the last %u passwords are accepted. See LoopDocs for troubleshooting.", dateFormatter.string(from: deliveryDate), maxOTPsToAccept)
+                } else {
+                    return String(format: "Error: Password has expired. See LoopDocs for troubleshooting.", maxOTPsToAccept)
+                }
+            case .previouslyUsed(let otp):
+                return "Error: Password \(otp) was already used. Wait for a new password for each command."
+            case .invalidFormat(let otp):
+                return "Error: Password has an invalid format: \(otp)."
+            case .incorrectOTP(let otp):
+                return "Error: Password is incorrect: \(otp)."
+            case .codeGeneratorFailed:
+                return "Error: Password validation is not available. See LoopDocs to setup."
+            }
+        }
+    }
+    
 }
 
+public struct OTP: Equatable {
+    public let period: OTPPeriod
+    public let password: String
+}
+
+public struct OTPPeriod: Equatable {
+    public let startDate: Date
+    public let endDate: Date
+}
 
 extension Generator.Algorithm {
     
@@ -220,5 +304,26 @@ extension URLComponents {
         self.host = host
         self.path = path
         self.queryItems = queryItems
+    }
+}
+
+//Rounding extension from https://stackoverflow.com/questions/1149256/round-nsdate-to-the-nearest-5-minutes
+extension Date {
+
+    public func round(precision: TimeInterval) -> Date {
+        return round(precision: precision, rule: .toNearestOrAwayFromZero)
+    }
+
+    public func ceil(precision: TimeInterval) -> Date {
+        return round(precision: precision, rule: .up)
+    }
+
+    public func floor(precision: TimeInterval) -> Date {
+        return round(precision: precision, rule: .down)
+    }
+
+    private func round(precision: TimeInterval, rule: FloatingPointRoundingRule) -> Date {
+        let seconds = (self.timeIntervalSinceReferenceDate / precision).rounded(rule) *  precision;
+        return Date(timeIntervalSinceReferenceDate: seconds)
     }
 }

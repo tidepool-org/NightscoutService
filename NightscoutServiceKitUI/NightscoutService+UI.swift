@@ -16,7 +16,7 @@ extension NightscoutService: ServiceUI {
         UIImage(named: "nightscout", in: Bundle(for: ServiceUICoordinator.self), compatibleWith: nil)!
     }
 
-    public static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<ServiceViewController, ServiceUI> {
+    public static func setupViewController(colorPalette: LoopUIColorPalette, pluginHost: PluginHost) -> SetupUIResult<ServiceViewController, ServiceUI> {
         return .userInteractionRequired(ServiceUICoordinator(colorPalette: colorPalette))
     }
 

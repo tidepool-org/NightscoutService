@@ -9,7 +9,7 @@
 import os.log
 import HealthKit
 import LoopKit
-import NightscoutUploadKit
+import NightscoutKit
 
 public enum NightscoutServiceError: Error {
     case incompatibleTherapySettings
@@ -46,17 +46,19 @@ public final class NightscoutService: Service {
     }
     private let lockedObjectIdCache: Locked<ObjectIdCache>
 
-    private var _uploader: NightscoutUploader?
+    private var _uploader: NightscoutClient?
 
-    private var uploader: NightscoutUploader? {
+    private var uploader: NightscoutClient? {
         if _uploader == nil {
             guard let siteURL = siteURL, let apiSecret = apiSecret else {
                 return nil
             }
-            _uploader = NightscoutUploader(siteURL: siteURL, APISecret: apiSecret)
+            _uploader = NightscoutClient(siteURL: siteURL, apiSecret: apiSecret)
         }
         return _uploader
     }
+    
+    private let commandSourceV1: RemoteCommandSourceV1
 
     private let log = OSLog(category: "NightscoutService")
 
@@ -64,6 +66,7 @@ public final class NightscoutService: Service {
         self.isOnboarded = false
         self.lockedObjectIdCache = Locked(ObjectIdCache())
         self.otpManager = OTPManager(secretStore: KeychainManager())
+        self.commandSourceV1 = RemoteCommandSourceV1(otpManager: otpManager)
     }
 
     public required init?(rawState: RawStateValue) {
@@ -78,6 +81,7 @@ public final class NightscoutService: Service {
         }
         
         self.otpManager = OTPManager(secretStore: KeychainManager())
+        self.commandSourceV1 = RemoteCommandSourceV1(otpManager: otpManager)
         
         restoreCredentials()
     }
@@ -99,7 +103,7 @@ public final class NightscoutService: Service {
             return
         }
 
-        let uploader = NightscoutUploader(siteURL: siteURL, APISecret: apiSecret)
+        let uploader = NightscoutClient(siteURL: siteURL, apiSecret: apiSecret)
         uploader.checkAuth(completion)
     }
 
@@ -276,7 +280,7 @@ extension NightscoutService: RemoteDataService {
             switch decision.reason {
             case "loop":
                 lastDosingDecisionForAutomaticDose = decision
-            case "updateRecommendedManualBolus", "normalBolus", "simpleBolus", "watchBolus":
+            case "updateRemoteRecommendation", "normalBolus", "simpleBolus", "watchBolus":
                 uploadPairs.append((decision, lastDosingDecisionForAutomaticDose))
             default:
                 break
@@ -331,12 +335,23 @@ extension NightscoutService: RemoteDataService {
         uploader.uploadProfiles(stored.compactMap { $0.profileSet }, completion: completion)
     }
     
-    public func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Bool {
-        guard let otpToValidate = notification["otp"] as? String else {
-            return false
+    
+    //MARK: Remote Commands
+    
+    public func commandFromPushNotification(_ notification: [String: AnyObject]) async throws -> RemoteCommand {
+        
+        enum RemoteCommandSourceError: Error {
+            case missingCommandSource
         }
-
-        return otpManager.validateOTP(otpToValidate: otpToValidate)
+        
+        let commandSource: RemoteCommandSource
+        if commandSourceV1.supportsPushNotification(notification) {
+            commandSource = commandSourceV1
+        } else {
+            throw RemoteCommandSourceError.missingCommandSource
+        }
+        
+        return try await commandSource.commandFromPushNotification(notification)
     }
     
     public func fetchStoredTherapySettings(completion: @escaping (Result<(TherapySettings,Date), Error>) -> Void) {
@@ -358,6 +373,17 @@ extension NightscoutService: RemoteDataService {
                 completion(.failure(error))
             }
         })
+    }
+    
+    enum NotificationValidationError: LocalizedError {
+        case missingOTP
+        
+        var errorDescription: String? {
+            switch self {
+            case .missingOTP:
+                return "Error: Password is required."
+            }
+        }
     }
 
 }

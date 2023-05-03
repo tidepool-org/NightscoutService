@@ -8,7 +8,7 @@
 
 import Foundation
 import LoopKit
-import NightscoutUploadKit
+import NightscoutKit
 import HealthKit
 
 extension SyncCarbObject {

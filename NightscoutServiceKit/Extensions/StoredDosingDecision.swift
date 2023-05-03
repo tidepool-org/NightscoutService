@@ -9,7 +9,7 @@
 import Foundation
 import HealthKit
 import LoopKit
-import NightscoutUploadKit
+import NightscoutKit
 
 extension StoredDosingDecision {
     
@@ -34,7 +34,7 @@ extension StoredDosingDecision {
         return PredictedBG(startDate: startDate, values: predictedGlucose.map { $0.quantity })
     }
     
-    var loopStatusAutomaticDoseRecommendation: NightscoutUploadKit.AutomaticDoseRecommendation? {
+    var loopStatusAutomaticDoseRecommendation: NightscoutKit.AutomaticDoseRecommendation? {
         guard let automaticDoseRecommendation = automaticDoseRecommendation else {
             return nil
         }
@@ -47,7 +47,7 @@ extension StoredDosingDecision {
             nightscoutTempBasalAdjustment = nil
         }
         
-        return NightscoutUploadKit.AutomaticDoseRecommendation(
+        return NightscoutKit.AutomaticDoseRecommendation(
             timestamp: date,
             tempBasalAdjustment: nightscoutTempBasalAdjustment,
             bolusVolume: automaticDoseRecommendation.bolusUnits ?? 0)
@@ -71,20 +71,6 @@ extension StoredDosingDecision {
 
     var loopStatusFailureReason: String? {
         return errors.first?.description
-    }
-    
-    func loopStatus(automaticDoseDecision: StoredDosingDecision?) -> LoopStatus {
-
-        return LoopStatus(name: Bundle.main.bundleDisplayName,
-                          version: Bundle.main.fullVersionString,
-                          timestamp: date,
-                          iob: loopStatusIOB,
-                          cob: loopStatusCOB,
-                          predicted: loopStatusPredicted,
-                          automaticDoseRecommendation: loopStatusAutomaticDoseRecommendation,
-                          recommendedBolus: loopStatusRecommendedBolus,
-                          enacted: automaticDoseDecision?.loopStatusEnacted,
-                          failureReason: automaticDoseDecision?.loopStatusFailureReason)
     }
     
     var pumpStatusBattery: BatteryStatus? {
@@ -129,11 +115,11 @@ extension StoredDosingDecision {
         )
     }
     
-    var overrideStatus: NightscoutUploadKit.OverrideStatus {
+    var overrideStatus: NightscoutKit.OverrideStatus {
         guard let scheduleOverride = scheduleOverride, scheduleOverride.isActive(),
             let glucoseTargetRange = glucoseTargetRangeSchedule?.value(at: date) else
         {
-            return NightscoutUploadKit.OverrideStatus(timestamp: date, active: false)
+            return NightscoutKit.OverrideStatus(timestamp: date, active: false)
         }
         
         let unit = glucoseTargetRangeSchedule?.unit ?? HKUnit.milligramsPerDeciliter
@@ -142,7 +128,7 @@ extension StoredDosingDecision {
         let currentCorrectionRange = CorrectionRange(minValue: lowerTarget, maxValue: upperTarget)
         let duration = scheduleOverride.duration != .indefinite ? round(scheduleOverride.actualEndDate.timeIntervalSince(date)): nil
         
-        return NightscoutUploadKit.OverrideStatus(name: scheduleOverride.context.name,
+        return NightscoutKit.OverrideStatus(name: scheduleOverride.context.name,
                                                   timestamp: date,
                                                   active: true,
                                                   currentCorrectionRange: currentCorrectionRange,
@@ -161,7 +147,16 @@ extension StoredDosingDecision {
             timestamp: date,
             pumpStatus: pumpStatus,
             uploaderStatus: uploaderStatus,
-            loopStatus: loopStatus(automaticDoseDecision: automaticDoseDecision),
+            loopStatus: LoopStatus(name: Bundle.main.bundleDisplayName,
+                                   version: Bundle.main.fullVersionString,
+                                   timestamp: date,
+                                   iob: loopStatusIOB,
+                                   cob: loopStatusCOB,
+                                   predicted: loopStatusPredicted,
+                                   automaticDoseRecommendation: loopStatusAutomaticDoseRecommendation,
+                                   recommendedBolus: loopStatusRecommendedBolus,
+                                   enacted: automaticDoseDecision?.loopStatusEnacted,
+                                   failureReason: automaticDoseDecision?.loopStatusFailureReason),
             overrideStatus: overrideStatus)
     }
     

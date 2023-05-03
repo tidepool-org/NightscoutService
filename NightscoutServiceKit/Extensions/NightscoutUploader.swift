@@ -1,5 +1,5 @@
 //
-//  NightscoutUploader.swift
+//  NightscoutClient.swift
 //  NightscoutServiceKit
 //
 //  Created by Darin Krauss on 6/20/19.
@@ -7,9 +7,9 @@
 //
 
 import LoopKit
-import NightscoutUploadKit
+import NightscoutKit
 
-extension NightscoutUploader {
+extension NightscoutClient {
 
     func createCarbData(_ data: [SyncCarbObject], completion: @escaping (Result<[String], Error>) -> Void) {
         guard !data.isEmpty else {
@@ -74,7 +74,7 @@ extension NightscoutUploader {
 
 }
 
-extension NightscoutUploader {
+extension NightscoutClient {
 
     func uploadGlucoseSamples(_ samples: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
         guard !samples.isEmpty else {
@@ -94,7 +94,7 @@ extension NightscoutUploader {
 
 }
 
-extension NightscoutUploader {
+extension NightscoutClient {
 
     func createDoses(_ data: [DoseEntry], usingObjectIdCache objectIdCache: ObjectIdCache, completion: @escaping (Result<[String], Error>) -> Void) {
         guard !data.isEmpty else {
