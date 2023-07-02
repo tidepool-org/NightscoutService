@@ -12,12 +12,12 @@ import NightscoutKit
 extension DoseEntry {
 
     func treatment(enteredBy source: String, withObjectId objectId: String?) -> NightscoutTreatment? {
+        let duration = endDate.timeIntervalSince(startDate)
+
         switch type {
         case .basal:
             return nil
         case .bolus:
-            let duration = endDate.timeIntervalSince(startDate)
-
             return BolusNightscoutTreatment(
                 timestamp: startDate,
                 enteredBy: source,
@@ -34,7 +34,7 @@ extension DoseEntry {
         case .resume:
             return PumpResumeTreatment(timestamp: startDate, enteredBy: source, /* id: objectId, */ syncIdentifier: syncIdentifier)
         case .suspend:
-            return PumpSuspendTreatment(timestamp: startDate, enteredBy: source, /* id: objectId, */ syncIdentifier: syncIdentifier)
+            return PumpSuspendTreatment(timestamp: startDate, enteredBy: source, duration: duration,/* id: objectId, */ syncIdentifier: syncIdentifier)
         case .tempBasal:
             return TempBasalNightscoutTreatment(
                 timestamp: startDate,
