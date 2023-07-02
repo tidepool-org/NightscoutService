@@ -254,7 +254,7 @@ public class OTPManager {
                     dateFormatter.dateFormat = "h:mm"
                     return String(format: "Error: Password sent at %@ has expired. Only the last %u passwords are accepted. See LoopDocs for troubleshooting.", dateFormatter.string(from: deliveryDate), maxOTPsToAccept)
                 } else {
-                    return String(format: "Error: Password has expired. See LoopDocs for troubleshooting.", maxOTPsToAccept)
+                    return String(format: "Error: Password has expired. See LoopDocs for troubleshooting.")
                 }
             case .previouslyUsed(let otp):
                 return "Error: Password \(otp) was already used. Wait for a new password for each command."

@@ -25,7 +25,7 @@ final class OverrideCancelRemoteNotificationTestCase: XCTestCase {
         let expectedSentAtDate = dateFormatter().date(from: sentAtDateString)!
         let expirationDateString = "2023-02-25T20:51:35.778Z"
         let expectedExpirationDate = dateFormatter().date(from: expirationDateString)!
-        let expectedCancelOverrideValue = true
+        let expectedCancelOverrideValue = "true"
         
         let notification: [String: Any] = [
             "remote-address": expectedRemoteAddress,

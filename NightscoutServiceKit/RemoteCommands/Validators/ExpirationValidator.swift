@@ -9,7 +9,7 @@
 import Foundation
 import LoopKit
 
-struct ExpirationValidator: RemoteCommandValidation {
+struct ExpirationValidator: RemoteCommandValidator {
     
     let expiration: Date?
     let nowDateSource: () -> Date = {Date()}

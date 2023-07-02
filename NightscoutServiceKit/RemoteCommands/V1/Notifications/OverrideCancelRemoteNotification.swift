@@ -14,27 +14,25 @@ public struct OverrideCancelRemoteNotification: RemoteNotification, Codable {
     public let remoteAddress: String
     public let expiration: Date?
     public let sentAt: Date?
-    public let cancelOverride: Bool
+    public let cancelOverride: String
+    public let enteredBy: String?
 
     enum CodingKeys: String, CodingKey {
         case remoteAddress = "remote-address"
         case expiration = "expiration"
         case sentAt = "sent-at"
         case cancelOverride = "cancel-temporary-override"
-    }
-    
-    func toRemoteCommand(otpManager: OTPManager, commandSource: RemoteCommandSource) -> NightscoutRemoteCommand {
-        let expirationValidator = ExpirationValidator(expiration: expiration)
-        return NightscoutRemoteCommand(id: id,
-                                       action: toRemoteAction(),
-                                       validators: [expirationValidator],
-                                       commandSource: commandSource
-        )
+        case enteredBy = "entered-by"
     }
     
     func toRemoteAction() -> Action {
         let action = OverrideCancelAction(remoteAddress: remoteAddress)
         return .cancelTemporaryOverride(action)
+    }
+    
+    func validate(otpManager: OTPManager) throws {
+        let expirationValidator = ExpirationValidator(expiration: expiration)
+        try expirationValidator.validate()
     }
     
     public static func includedInNotification(_ notification: [String: Any]) -> Bool {

@@ -10,12 +10,13 @@ import Foundation
 import LoopKit
 
 public struct BolusRemoteNotification: RemoteNotification, Codable {
-    
+
     public let amount: Double
     public let remoteAddress: String
     public let expiration: Date?
     public let sentAt: Date?
-    public let otp: String
+    public let otp: String?
+    public let enteredBy: String?
     
     enum CodingKeys: String, CodingKey {
         case remoteAddress = "remote-address"
@@ -23,20 +24,18 @@ public struct BolusRemoteNotification: RemoteNotification, Codable {
         case expiration = "expiration"
         case sentAt = "sent-at"
         case otp = "otp"
-    }
-    
-    func toRemoteCommand(otpManager: OTPManager, commandSource: RemoteCommandSource) -> NightscoutRemoteCommand {
-        let expirationValidator = ExpirationValidator(expiration: expiration)
-        let otpValidator = OTPValidator(sentAt: sentAt, otp: otp, otpManager: otpManager)
-        return NightscoutRemoteCommand(id: id,
-                                       action: toRemoteAction(),
-                                       validators: [expirationValidator, otpValidator],
-                                       commandSource: commandSource
-        )
+        case enteredBy = "entered-by"
     }
     
     func toRemoteAction() -> Action {
         return .bolusEntry(BolusAction(amountInUnits: amount))
+    }
+    
+    func validate(otpManager: OTPManager) throws {
+        let expirationValidator = ExpirationValidator(expiration: expiration)
+        let otpValidator = OTPValidator(sentAt: sentAt, otp: otp, otpManager: otpManager)
+        try expirationValidator.validate()
+        try otpValidator.validate()
     }
     
     public static func includedInNotification(_ notification: [String: Any]) -> Bool {
