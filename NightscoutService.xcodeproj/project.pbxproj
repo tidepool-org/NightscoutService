@@ -22,7 +22,7 @@
 		A934B6182358F49300949C8B /* StoredSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A934B6172358F49300949C8B /* StoredSettings.swift */; };
 		A934B61A2358F5FC00949C8B /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = A934B6192358F5FC00949C8B /* TemporaryScheduleOverride.swift */; };
 		A941B08729BCB87500F91340 /* RemoteCommandSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941B08629BCB87500F91340 /* RemoteCommandSource.swift */; };
-		A941B08929BCB99C00F91340 /* RemoteCommandValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941B08829BCB99C00F91340 /* RemoteCommandValidation.swift */; };
+		A941B08929BCB99C00F91340 /* RemoteCommandValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941B08829BCB99C00F91340 /* RemoteCommandValidator.swift */; };
 		A941B09029BD4A9E00F91340 /* CarbRemoteNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941B08B29BD4A9D00F91340 /* CarbRemoteNotification.swift */; };
 		A941B09129BD4A9E00F91340 /* BolusRemoteNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941B08C29BD4A9D00F91340 /* BolusRemoteNotification.swift */; };
 		A941B09229BD4A9F00F91340 /* OverrideCancelRemoteNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941B08D29BD4A9E00F91340 /* OverrideCancelRemoteNotification.swift */; };
@@ -37,12 +37,16 @@
 		A993990322BC7095005E39D3 /* NightscoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A993990222BC7095005E39D3 /* NightscoutService.swift */; };
 		A993990522BC70B7005E39D3 /* NightscoutService+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A993990422BC70B7005E39D3 /* NightscoutService+UI.swift */; };
 		A99A115E29AA28EE007919CE /* RemoteCommandSourceV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A115D29AA28EE007919CE /* RemoteCommandSourceV1.swift */; };
-		A99A116A29AA2DEB007919CE /* NightscoutRemoteCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A116929AA2DEB007919CE /* NightscoutRemoteCommand.swift */; };
 		A99A117829AA4D0A007919CE /* ExpirationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A117729AA4D0A007919CE /* ExpirationValidator.swift */; };
 		A99A117A29AA4D30007919CE /* OTPValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A117929AA4D30007919CE /* OTPValidator.swift */; };
 		A99C713523396CB100AB9035 /* NightscoutServiceKitPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = A99C713323396CB100AB9035 /* NightscoutServiceKitPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A99C714023396D6200AB9035 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C62DA32331CAD400535612 /* OSLog.swift */; };
 		A99C714223396D8E00AB9035 /* NightscoutServiceKitPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C714123396D8E00AB9035 /* NightscoutServiceKitPlugin.swift */; };
+		A9AA6E5B29EB072E008FFA78 /* OverrideAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA6E5A29EB072E008FFA78 /* OverrideAction.swift */; };
+		A9AA6E6329EB07D7008FFA78 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA6E5D29EB07D6008FFA78 /* Action.swift */; };
+		A9AA6E6429EB07D7008FFA78 /* CarbAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA6E5E29EB07D6008FFA78 /* CarbAction.swift */; };
+		A9AA6E6529EB07D7008FFA78 /* OverrideCancelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA6E5F29EB07D6008FFA78 /* OverrideCancelAction.swift */; };
+		A9AA6E6629EB07D7008FFA78 /* BolusAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA6E6029EB07D6008FFA78 /* BolusAction.swift */; };
 		A9B007B322BD6FF7000131DE /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B007B222BD6FF7000131DE /* LocalizedString.swift */; };
 		A9B007B422BD6FF7000131DE /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B007B222BD6FF7000131DE /* LocalizedString.swift */; };
 		A9B007BD22BD7120000131DE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9B007BB22BD7120000131DE /* Localizable.strings */; };
@@ -149,7 +153,7 @@
 		A934B6172358F49300949C8B /* StoredSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredSettings.swift; sourceTree = "<group>"; };
 		A934B6192358F5FC00949C8B /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
 		A941B08629BCB87500F91340 /* RemoteCommandSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteCommandSource.swift; sourceTree = "<group>"; };
-		A941B08829BCB99C00F91340 /* RemoteCommandValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteCommandValidation.swift; sourceTree = "<group>"; };
+		A941B08829BCB99C00F91340 /* RemoteCommandValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteCommandValidator.swift; sourceTree = "<group>"; };
 		A941B08B29BD4A9D00F91340 /* CarbRemoteNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbRemoteNotification.swift; sourceTree = "<group>"; };
 		A941B08C29BD4A9D00F91340 /* BolusRemoteNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusRemoteNotification.swift; sourceTree = "<group>"; };
 		A941B08D29BD4A9E00F91340 /* OverrideCancelRemoteNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideCancelRemoteNotification.swift; sourceTree = "<group>"; };
@@ -165,13 +169,17 @@
 		A993990222BC7095005E39D3 /* NightscoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutService.swift; sourceTree = "<group>"; };
 		A993990422BC70B7005E39D3 /* NightscoutService+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NightscoutService+UI.swift"; sourceTree = "<group>"; };
 		A99A115D29AA28EE007919CE /* RemoteCommandSourceV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCommandSourceV1.swift; sourceTree = "<group>"; };
-		A99A116929AA2DEB007919CE /* NightscoutRemoteCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutRemoteCommand.swift; sourceTree = "<group>"; };
 		A99A117729AA4D0A007919CE /* ExpirationValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirationValidator.swift; sourceTree = "<group>"; };
 		A99A117929AA4D30007919CE /* OTPValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPValidator.swift; sourceTree = "<group>"; };
 		A99C713123396CB100AB9035 /* NightscoutServiceKitPlugin.loopplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NightscoutServiceKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		A99C713323396CB100AB9035 /* NightscoutServiceKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutServiceKitPlugin.h; sourceTree = "<group>"; };
 		A99C713423396CB100AB9035 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A99C714123396D8E00AB9035 /* NightscoutServiceKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutServiceKitPlugin.swift; sourceTree = "<group>"; };
+		A9AA6E5A29EB072E008FFA78 /* OverrideAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideAction.swift; sourceTree = "<group>"; };
+		A9AA6E5D29EB07D6008FFA78 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		A9AA6E5E29EB07D6008FFA78 /* CarbAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbAction.swift; sourceTree = "<group>"; };
+		A9AA6E5F29EB07D6008FFA78 /* OverrideCancelAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideCancelAction.swift; sourceTree = "<group>"; };
+		A9AA6E6029EB07D6008FFA78 /* BolusAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusAction.swift; sourceTree = "<group>"; };
 		A9B007B222BD6FF7000131DE /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		A9B007BC22BD7120000131DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B007BF22BD7130000131DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -393,15 +401,22 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
-		A99A115C29AA2870007919CE /* RemoteCommands */ = {
+		A98A0C1F29C71E8F0067DE0F /* V1 */ = {
 			isa = PBXGroup;
 			children = (
 				A941B08A29BD4A8600F91340 /* Notifications */,
-				A99A117629AA3427007919CE /* Validators */,
-				A941B08629BCB87500F91340 /* RemoteCommandSource.swift */,
 				A99A115D29AA28EE007919CE /* RemoteCommandSourceV1.swift */,
-				A941B08829BCB99C00F91340 /* RemoteCommandValidation.swift */,
-				A99A116929AA2DEB007919CE /* NightscoutRemoteCommand.swift */,
+			);
+			path = V1;
+			sourceTree = "<group>";
+		};
+		A99A115C29AA2870007919CE /* RemoteCommands */ = {
+			isa = PBXGroup;
+			children = (
+				A9AA6E5729EB06AA008FFA78 /* Actions */,
+				A941B08629BCB87500F91340 /* RemoteCommandSource.swift */,
+				A98A0C1F29C71E8F0067DE0F /* V1 */,
+				A99A117629AA3427007919CE /* Validators */,
 			);
 			path = RemoteCommands;
 			sourceTree = "<group>";
@@ -411,6 +426,7 @@
 			children = (
 				A99A117729AA4D0A007919CE /* ExpirationValidator.swift */,
 				A99A117929AA4D30007919CE /* OTPValidator.swift */,
+				A941B08829BCB99C00F91340 /* RemoteCommandValidator.swift */,
 			);
 			path = Validators;
 			sourceTree = "<group>";
@@ -423,6 +439,18 @@
 				A99C714123396D8E00AB9035 /* NightscoutServiceKitPlugin.swift */,
 			);
 			path = NightscoutServiceKitPlugin;
+			sourceTree = "<group>";
+		};
+		A9AA6E5729EB06AA008FFA78 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				A9AA6E5D29EB07D6008FFA78 /* Action.swift */,
+				A9AA6E6029EB07D6008FFA78 /* BolusAction.swift */,
+				A9AA6E5E29EB07D6008FFA78 /* CarbAction.swift */,
+				A9AA6E5A29EB072E008FFA78 /* OverrideAction.swift */,
+				A9AA6E5F29EB07D6008FFA78 /* OverrideCancelAction.swift */,
+			);
+			path = Actions;
 			sourceTree = "<group>";
 		};
 		A9B007AE22BD6FD0000131DE /* Common */ = {
@@ -710,27 +738,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9AA6E5B29EB072E008FFA78 /* OverrideAction.swift in Sources */,
 				A941B09129BD4A9E00F91340 /* BolusRemoteNotification.swift in Sources */,
 				A993990322BC7095005E39D3 /* NightscoutService.swift in Sources */,
 				A99A117829AA4D0A007919CE /* ExpirationValidator.swift in Sources */,
 				A934B6162358F42A00949C8B /* StoredDosingDecision.swift in Sources */,
+				A9AA6E6429EB07D7008FFA78 /* CarbAction.swift in Sources */,
 				A90E39A922BC7AD10016DFE8 /* Bundle.swift in Sources */,
 				A90E39A322BC782C0016DFE8 /* SyncCarbObject.swift in Sources */,
 				A941B09329BD4A9F00F91340 /* RemoteNotification.swift in Sources */,
+				A9AA6E6629EB07D7008FFA78 /* BolusAction.swift in Sources */,
 				A934B61A2358F5FC00949C8B /* TemporaryScheduleOverride.swift in Sources */,
 				A941B09029BD4A9E00F91340 /* CarbRemoteNotification.swift in Sources */,
 				A94DA7642353CF930082E26D /* StoredGlucoseSample.swift in Sources */,
-				A99A116A29AA2DEB007919CE /* NightscoutRemoteCommand.swift in Sources */,
 				A941B09429BD4A9F00F91340 /* OverrideRemoteNotification.swift in Sources */,
 				A99A117A29AA4D30007919CE /* OTPValidator.swift in Sources */,
 				C1E703642506BE9400DAB534 /* ObjectIdCache.swift in Sources */,
-				A941B08929BCB99C00F91340 /* RemoteCommandValidation.swift in Sources */,
+				A941B08929BCB99C00F91340 /* RemoteCommandValidator.swift in Sources */,
 				C1398D2027C41E3D00416AD6 /* ProfileSet.swift in Sources */,
+				A9AA6E6329EB07D7008FFA78 /* Action.swift in Sources */,
 				A90E39A722BC7A360016DFE8 /* HKUnit.swift in Sources */,
 				A99A115E29AA28EE007919CE /* RemoteCommandSourceV1.swift in Sources */,
 				A9246B2526231B3A00CCDCB3 /* OTPManager.swift in Sources */,
 				A90E399E22BC76DB0016DFE8 /* TimeInterval.swift in Sources */,
 				A90E39A122BC773A0016DFE8 /* NightscoutUploader.swift in Sources */,
+				A9AA6E6529EB07D7008FFA78 /* OverrideCancelAction.swift in Sources */,
 				A9B007B322BD6FF7000131DE /* LocalizedString.swift in Sources */,
 				A941B08729BCB87500F91340 /* RemoteCommandSource.swift in Sources */,
 				A941B09229BD4A9F00F91340 /* OverrideCancelRemoteNotification.swift in Sources */,
@@ -1351,6 +1383,7 @@
 		};
 /* End XCConfigurationList section */
 
+
 /* Begin XCRemoteSwiftPackageReference section */
 		C1B9ACF627DE987400857532 /* XCRemoteSwiftPackageReference "OneTimePassword" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1369,7 +1402,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
 		C1B9ACF727DE987400857532 /* OneTimePassword */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1385,3 +1417,4 @@
 	};
 	rootObject = A91BAC1222BC691A00ABF1BB /* Project object */;
 }
+

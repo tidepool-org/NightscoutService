@@ -9,7 +9,7 @@
 import Foundation
 import LoopKit
 
-struct OTPValidator: RemoteCommandValidation {
+struct OTPValidator: RemoteCommandValidator {
     
     let sentAt: Date?
     let otp: String?

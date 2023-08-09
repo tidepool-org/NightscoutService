@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoopKit
 
 protocol RemoteNotification: Codable {
     
@@ -14,8 +15,11 @@ protocol RemoteNotification: Codable {
     var expiration: Date? {get}
     var sentAt: Date? {get}
     var remoteAddress: String {get}
+    var enteredBy: String? {get}
     
-    func toRemoteCommand(otpManager: OTPManager, commandSource: RemoteCommandSource) -> NightscoutRemoteCommand
+    func toRemoteAction() -> Action
+    func validate(otpManager: OTPManager) throws
+    
     static func includedInNotification(_ notification: [String: Any]) -> Bool
 }
 
@@ -49,7 +53,18 @@ extension DateFormatter {
 
 extension Dictionary<String, AnyObject> {
     
-    func toRemoteNotification() throws -> RemoteNotification? {
+    enum RemoteNotificationError: LocalizedError {
+        case unhandledNotification([String: AnyObject])
+        
+        var errorDescription: String? {
+            switch self {
+            case .unhandledNotification(let notification):
+                return String(format: NSLocalizedString("Unhandled Notification: %1$@", comment: "The prefix for the remote unhandled notification error. (1: notification payload)"), notification)
+            }
+        }
+    }
+    
+    func toRemoteNotification() throws -> RemoteNotification {
         if BolusRemoteNotification.includedInNotification(self) {
             return try BolusRemoteNotification(dictionary: self)
         } else if CarbRemoteNotification.includedInNotification(self) {
@@ -59,7 +74,7 @@ extension Dictionary<String, AnyObject> {
         } else if OverrideCancelRemoteNotification.includedInNotification(self) {
             return try OverrideCancelRemoteNotification(dictionary: self)
         } else {
-            return nil
+            throw RemoteNotificationError.unhandledNotification(self)
         }
     }
 }

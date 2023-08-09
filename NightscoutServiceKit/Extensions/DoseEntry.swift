@@ -12,12 +12,12 @@ import NightscoutKit
 extension DoseEntry {
 
     func treatment(enteredBy source: String, withObjectId objectId: String?) -> NightscoutTreatment? {
+        let duration = endDate.timeIntervalSince(startDate)
+
         switch type {
         case .basal:
             return nil
         case .bolus:
-            let duration = endDate.timeIntervalSince(startDate)
-
             return BolusNightscoutTreatment(
                 timestamp: startDate,
                 enteredBy: source,
@@ -32,9 +32,22 @@ extension DoseEntry {
                 insulinType: insulinType?.brandName
             )
         case .resume:
-            return PumpResumeTreatment(timestamp: startDate, enteredBy: source, /* id: objectId, */ syncIdentifier: syncIdentifier)
+            return nil
         case .suspend:
-            return PumpSuspendTreatment(timestamp: startDate, enteredBy: source, /* id: objectId, */ syncIdentifier: syncIdentifier)
+            // Nightscout does not have a separate "Suspend" treatment. Record a suspend as a temp basal with a reason of "suspend"
+            return TempBasalNightscoutTreatment(
+                timestamp: startDate,
+                enteredBy: source,
+                temp: .Absolute,  // DoseEntry only supports .absolute types
+                rate: 0,
+                absolute: unitsPerHour,
+                duration: endDate.timeIntervalSince(startDate),
+                amount: deliveredUnits,
+                automatic: automatic ?? true,
+                syncIdentifier: syncIdentifier,
+                insulinType: nil,
+                reason: "suspend"
+            )
         case .tempBasal:
             return TempBasalNightscoutTreatment(
                 timestamp: startDate,
