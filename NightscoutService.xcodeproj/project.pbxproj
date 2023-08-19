@@ -1383,7 +1383,6 @@
 		};
 /* End XCConfigurationList section */
 
-
 /* Begin XCRemoteSwiftPackageReference section */
 		C1B9ACF627DE987400857532 /* XCRemoteSwiftPackageReference "OneTimePassword" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1402,6 +1401,7 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		C1B9ACF727DE987400857532 /* OneTimePassword */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1417,4 +1417,3 @@
 	};
 	rootObject = A91BAC1222BC691A00ABF1BB /* Project object */;
 }
-
