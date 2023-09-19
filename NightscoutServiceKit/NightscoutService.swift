@@ -20,13 +20,15 @@ public enum NightscoutServiceError: Error {
 
 public final class NightscoutService: Service {
 
-    public static let serviceIdentifier = "NightscoutService"
+    public static let pluginIdentifier = "NightscoutService"
 
     public static let localizedTitle = LocalizedString("Nightscout", comment: "The title of the Nightscout service")
     
     public let objectIdCacheKeepTime = TimeInterval(24 * 60 * 60)
 
     public weak var serviceDelegate: ServiceDelegate?
+    
+    public weak var stateDelegate: StatefulPluggableDelegate?
 
     public var siteURL: URL?
 
@@ -118,17 +120,17 @@ public final class NightscoutService: Service {
         isOnboarded = true
 
         saveCredentials()
-        serviceDelegate?.serviceDidUpdateState(self)
+        stateDelegate?.pluginDidUpdateState(self)
     }
 
     public func completeUpdate() {
         saveCredentials()
-        serviceDelegate?.serviceDidUpdateState(self)
+        stateDelegate?.pluginDidUpdateState(self)
     }
 
     public func completeDelete() {
         clearCredentials()
-        serviceDelegate?.serviceWantsDeletion(self)
+        stateDelegate?.pluginWantsDeletion(self)
     }
 
     private func saveCredentials() {
@@ -210,7 +212,7 @@ extension NightscoutService: RemoteDataService {
                         self.objectIdCache.add(syncIdentifier: syncIdentifier, objectId: objectId)
                     }
                 }
-                self.serviceDelegate?.serviceDidUpdateState(self)
+                self.stateDelegate?.pluginDidUpdateState(self)
                 
                 uploader.updateCarbData(updated, usingObjectIdCache: self.objectIdCache) { result in
                     switch result {
@@ -223,7 +225,7 @@ extension NightscoutService: RemoteDataService {
                                 completion(.failure(error))
                             case .success(let deletedUploaded):
                                 self.objectIdCache.purge(before: Date().addingTimeInterval(-self.objectIdCacheKeepTime))
-                                self.serviceDelegate?.serviceDidUpdateState(self)
+                                self.stateDelegate?.pluginDidUpdateState(self)
                                 completion(.success(createdUploaded || updatedUploaded || deletedUploaded))
                             }
                         }
@@ -253,7 +255,7 @@ extension NightscoutService: RemoteDataService {
                         self.objectIdCache.add(syncIdentifier: syncIdentifier, objectId: objectId)
                     }
                 }
-                self.serviceDelegate?.serviceDidUpdateState(self)
+                self.stateDelegate?.pluginDidUpdateState(self)
 
                 uploader.deleteDoses(deleted.filter { !$0.isMutable }, usingObjectIdCache: self.objectIdCache) { result in
                     switch result {
@@ -261,7 +263,7 @@ extension NightscoutService: RemoteDataService {
                         completion(.failure(error))
                     case .success(let deletedUploaded):
                         self.objectIdCache.purge(before: Date().addingTimeInterval(-self.objectIdCacheKeepTime))
-                        self.serviceDelegate?.serviceDidUpdateState(self)
+                        self.stateDelegate?.pluginDidUpdateState(self)
                         completion(.success(createdUploaded || deletedUploaded))
                     }
                 }
