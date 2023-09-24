@@ -18,11 +18,12 @@ extension PersistedPumpEvent {
         case .replaceComponent(let componentType):
             switch componentType {
             case .infusionSet, .pump:
-                let note = title
-                return NightscoutTreatment(timestamp: date, enteredBy: source, notes: note, eventType: .siteChange)
+                return NightscoutTreatment(timestamp: date, enteredBy: source, notes: title, eventType: .siteChange)
             default:
                 return nil
             }
+        case .alarm:
+            return NightscoutTreatment(timestamp: date, enteredBy: source, notes: title, eventType: .note)
         default:
             return nil
         }
