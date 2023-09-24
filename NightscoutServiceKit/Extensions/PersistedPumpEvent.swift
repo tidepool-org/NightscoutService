@@ -23,9 +23,6 @@ extension PersistedPumpEvent {
             default:
                 return nil
             }
-        case .rewind:
-            let note = title
-            return NightscoutTreatment(timestamp: date, enteredBy: source, notes: note, eventType: .siteChange)
         default:
             return nil
         }
